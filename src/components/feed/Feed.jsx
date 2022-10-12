@@ -10,7 +10,7 @@ const Feed = () => {
   useEffect(() => {
     const fetchPosts = async () => {
       const res = await axios.get(
-        "http://localhost:5000/api/posts/timeline/63462922bbd2808f78a8381a"
+        "http://localhost:5000/api/posts/timeline/6346e10d6d1c8f98968f1b14"
       );
       setPosts(res.data);
     };

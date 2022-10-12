@@ -31,7 +31,9 @@ const Post = ({ post }) => {
             alt=""
           />
           <div className="flex flex-col ml-2 text-sm cursor-pointer">
-            <p className=" font-bold">Dalton Barnett</p>
+            <p className=" font-bold">
+              {user.firstname} {user.lastname}
+            </p>
             <p className=" mt-0 text-gray-500">@{user.username}</p>
           </div>
         </div>
