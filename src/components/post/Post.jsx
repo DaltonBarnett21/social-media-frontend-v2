@@ -1,13 +1,14 @@
 import React from "react";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
-import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
 const Post = ({ post }) => {
   const [user, setUser] = useState({});
+  const [like, setLike] = useState(0);
+  const [hasLiked, setHasLiked] = useState(false);
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -18,6 +19,11 @@ const Post = ({ post }) => {
     };
     fetchPosts();
   }, []);
+
+  const handleLikes = () => {
+    setLike(hasLiked ? like - 1 : like + 1);
+    setHasLiked(!hasLiked);
+  };
 
   return (
     <div className="bg-white m-5 shadow-md rounded-lg p-2 ">
@@ -52,12 +58,11 @@ const Post = ({ post }) => {
       <div className="pb-3 flex justify-between  p-2">
         <div className="flex">
           <div className="flex">
-            <ThumbUpOffAltIcon className=" cursor-pointer text-blue-400" />
-            <p className="ml-1">12</p>
-          </div>
-          <div className="flex ml-3">
-            <FavoriteBorderIcon className=" cursor-pointer text-blue-400" />
-            <p className="ml-1">5</p>
+            <ThumbUpOffAltIcon
+              onClick={handleLikes}
+              className=" cursor-pointer text-blue-400"
+            />
+            <p className="ml-1">{like}</p>
           </div>
         </div>
         <div className="flex ml-3">

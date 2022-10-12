@@ -2,8 +2,22 @@ import React from "react";
 import PhotoLibraryIcon from "@mui/icons-material/PhotoLibrary";
 import EmojiEmotionsIcon from "@mui/icons-material/EmojiEmotions";
 import SendIcon from "@mui/icons-material/Send";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 const CreatePost = () => {
+  const [user, setUser] = useState({});
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      const res = await axios.get(
+        `http://localhost:5000/api/users/6346e10d6d1c8f98968f1b14`
+      );
+      setUser(res.data);
+    };
+    fetchPosts();
+  }, []);
+
   return (
     <div className="bg-white m-5 shadow-md rounded-lg ">
       <div className="flex p-2 ">
@@ -15,12 +29,14 @@ const CreatePost = () => {
           alt=""
         />
         <div className="flex flex-col ml-2 text-sm cursor-pointer">
-          <p className=" font-bold">Dalton Barnett</p>
-          <p className=" mt-0 text-gray-500">@daltonbarnett21</p>
+          <p className=" font-bold">
+            {user.firstname} {user.lastname}
+          </p>
+          <p className=" mt-0 text-gray-500">@{user.username}</p>
         </div>
       </div>
       <input
-        placeholder="What's on your mind, Dalton?"
+        placeholder={`What's on your mind, ${user.firstname}?`}
         type="text"
         className="w-full p-5 outline-none text-gray-600 h-20"
       />

@@ -5,7 +5,7 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 
 const Header = () => {
   return (
-    <div className="sticky top-0 bg-white drop-shadow-xl z-50">
+    <div className="sticky top-0 bg-white  z-50">
       <div className="flex justify-between  p-5">
         <img
           src="/logo-no-background.png"
