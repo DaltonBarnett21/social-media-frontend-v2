@@ -48,11 +48,11 @@ const Post = ({ post }) => {
       <div className=" text-gray-600 pt-2 pb-2 p-2">
         <p>{post.desc}</p>
         <div className="mt-2">
-          <img
+          {/* <img
             src="/post.jpg"
             className="w-full object-cover rounded-lg "
             alt=""
-          />
+          /> */}
         </div>
       </div>
       <div className="pb-3 flex justify-between  p-2">
