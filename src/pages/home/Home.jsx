@@ -15,6 +15,7 @@ const Home = () => {
         <div className="hidden lg:block lg:flex-[2] bg-white relative">
           <Leftbar />
         </div>
+
         <Feed />
         <div className="hidden lg:block lg:flex-[2] bg-white relative">
           <Rightbar />

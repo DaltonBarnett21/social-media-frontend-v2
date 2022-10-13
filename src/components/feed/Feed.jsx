@@ -10,6 +10,7 @@ const Feed = () => {
   const postState = useSelector((state) => state.post);
 
   useEffect(() => {
+    setPosts([]);
     const fetchPosts = async () => {
       const res = await axios.get(
         "http://localhost:5000/api/posts/timeline/6346e10d6d1c8f98968f1b14"
@@ -24,7 +25,7 @@ const Feed = () => {
   }, [postState]);
 
   return (
-    <div className="flex-1 lg:block lg:flex-[5] lg:p-1 ">
+    <div className="flex-1 lg:block lg:flex-[5] lg:p-1 relative ">
       <CreatePost />
       {posts.map((p, i) => (
         <Post key={i} post={p} />

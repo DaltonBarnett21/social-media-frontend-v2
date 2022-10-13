@@ -1,15 +1,25 @@
 import React from "react";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
+import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { motion, AnimatePresence } from "framer-motion";
+
+import Comment from "../comments/Comment";
+import CreateComment from "../createComment/CreateComment";
 
 const Post = ({ post }) => {
   const [user, setUser] = useState({});
-  const [like, setLike] = useState(0);
+  const [like, setLike] = useState(post.likes.length);
+  const [showModal, setShowModel] = useState(false);
+  const [showMore, setShowMore] = useState(false);
   const [hasLiked, setHasLiked] = useState(false);
+  const [comments, setComments] = useState();
+  const [hasCommented, setHasCommented] = useState(false);
 
+  //get user profile info move to redux later
   useEffect(() => {
     const fetchPosts = async () => {
       const res = await axios.get(
@@ -20,14 +30,29 @@ const Post = ({ post }) => {
     fetchPosts();
   }, []);
 
-  const handleLikes = () => {
+  //get comments
+  useEffect(() => {
+    const fetchPosts = async () => {
+      const res = await axios.get(
+        `http://localhost:5000/api/comments/${post._id}`
+      );
+      setComments(res.data);
+    };
+    fetchPosts();
+  }, [hasCommented]);
+
+  //handleLikes
+  const handleLikes = async () => {
     setLike(hasLiked ? like - 1 : like + 1);
+    await axios.put(`http://localhost:5000/api/posts/${post._id}/like`, {
+      userId: post.userId,
+    });
     setHasLiked(!hasLiked);
   };
 
   return (
-    <div className="bg-white m-5 shadow-md rounded-lg p-2 ">
-      <div className="  flex justify-between items-center p-2">
+    <div className="bg-white m-5 shadow-md rounded-lg p-2 relative  ">
+      <div className="  flex justify-between items-center relative p-2">
         <div className="flex items-center">
           <img
             src="/me.jpg"
@@ -43,7 +68,17 @@ const Post = ({ post }) => {
             <p className=" mt-0 text-gray-500">@{user.username}</p>
           </div>
         </div>
-        <MoreVertIcon className="cursor-pointer" />
+        <MoreVertIcon
+          onClick={() => setShowMore(!showMore)}
+          className="cursor-pointer"
+        />
+        {showMore && (
+          <div className=" bg-gray-50 hover:bg-gray-100 border text-red-500 border-gray-500 p-2 absolute -bottom-5 h-10 w-24 -right-6 shadow-md rounded-lg">
+            <p className=" hover:cursor-pointer">
+              <b>Delete Post</b>{" "}
+            </p>
+          </div>
+        )}
       </div>
       <div className=" text-gray-600 pt-2 pb-2 p-2">
         <p>{post.desc}</p>
@@ -55,21 +90,67 @@ const Post = ({ post }) => {
           /> */}
         </div>
       </div>
-      <div className="pb-3 flex justify-between  p-2">
+      <div
+        className={`pb-3 flex justify-between  p-2 ${
+          showModal ? "mb-0" : "mb-12"
+        }`}
+      >
         <div className="flex">
           <div className="flex">
-            <ThumbUpOffAltIcon
-              onClick={handleLikes}
-              className=" cursor-pointer text-blue-400"
-            />
+            {hasLiked ? (
+              <ThumbUpIcon
+                onClick={handleLikes}
+                className=" cursor-pointer text-blue-400"
+              />
+            ) : (
+              <ThumbUpOffAltIcon
+                onClick={handleLikes}
+                className=" cursor-pointer text-blue-400"
+              />
+            )}
+
             <p className="ml-1">{like}</p>
           </div>
         </div>
-        <div className="flex ml-3">
+        <div className="flex ml-3" onClick={() => setShowModel(!showModal)}>
           <ChatBubbleOutlineIcon className=" cursor-pointer text-blue-400" />
-          <p className="ml-1">2</p>
+          <p className="ml-1">{comments?.length}</p>
         </div>
       </div>
+
+      <CreateComment
+        post={post}
+        hasCommented={hasCommented}
+        setHasCommented={setHasCommented}
+        setShowModel={setShowModel}
+      />
+
+      <AnimatePresence>
+        {showModal && (
+          <motion.div
+            initial={{ y: 0, opacity: 0 }}
+            animate={{
+              height: "200px",
+              opacity: 1,
+              transition: {
+                duration: 0.6,
+              },
+            }}
+            exit={{
+              height: 0,
+              opacity: 0,
+              transition: {
+                duration: 0.2,
+              },
+            }}
+            className=" bg-gray-100 p-2 overflow-y-auto relative mb-20 "
+          >
+            {comments.map((c, i) => (
+              <Comment key={i} commentData={c} />
+            ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
