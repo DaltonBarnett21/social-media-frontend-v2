@@ -28,7 +28,7 @@ const Feed = () => {
     <div className="flex-1 lg:block lg:flex-[5] lg:p-1 relative ">
       <CreatePost />
       {posts.map((p, i) => (
-        <Post key={i} post={p} />
+        <Post key={i} post={p} setPosts={setPosts} posts={posts} />
       ))}
     </div>
   );

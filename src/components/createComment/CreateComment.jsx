@@ -10,6 +10,7 @@ const CreateComment = ({
   setShowModel,
 }) => {
   const inputRef = useRef();
+  const [isDisabled, setIsDisabled] = useState(true);
   const [comment, setComment] = useState({
     userId: "6346e10d6d1c8f98968f1b14",
     comment: "",
@@ -19,7 +20,11 @@ const CreateComment = ({
     const { name, value } = e.target;
     const newComment = {};
     newComment[name] = value;
-
+    if (newComment.comment.length > 0) {
+      setIsDisabled(false);
+    } else {
+      setIsDisabled(true);
+    }
     setComment({ ...comment, ...newComment });
   };
 
@@ -35,7 +40,7 @@ const CreateComment = ({
     } catch (err) {
       console.log(err);
     }
-
+    setIsDisabled(true);
     inputRef.current.value = "";
   };
   return (
@@ -52,14 +57,22 @@ const CreateComment = ({
       />
       <input
         type="text"
+        autoComplete="off"
         placeholder="comment"
         className="ml-3 w-full rounded-md p-2 outline-none"
         onChange={handleChange}
         ref={inputRef}
         name="comment"
       />
-      <button className="p-2 ml-3" type="submit">
-        <SendIcon role="button" className=" text-sky-500 cursor-pointer  " />
+      <button className="p-2 ml-3" type="submit" disabled={isDisabled}>
+        <SendIcon
+          role="button"
+          className={` ${
+            isDisabled
+              ? "text-gray-400 cursor-not-allowed"
+              : "text-sky-500  cursor-pointer"
+          } `}
+        />
       </button>
     </form>
   );

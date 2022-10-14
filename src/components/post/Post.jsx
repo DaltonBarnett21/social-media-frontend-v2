@@ -1,5 +1,4 @@
 import React from "react";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
 import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
@@ -9,15 +8,23 @@ import { motion, AnimatePresence } from "framer-motion";
 import Comment from "../comments/Comment";
 import CreateComment from "../createComment/CreateComment";
 import { format } from "timeago.js";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import ShowMore from "../utilities/ShowMore";
 
-const Post = ({ post }) => {
+const Post = ({ post, posts, setPosts }) => {
   const [user, setUser] = useState({});
   const [like, setLike] = useState(post.likes.length);
   const [showModal, setShowModel] = useState(false);
-  const [showMore, setShowMore] = useState(false);
   const [hasLiked, setHasLiked] = useState(false);
   const [comments, setComments] = useState();
   const [hasCommented, setHasCommented] = useState(false);
+
+  const notify = () => {
+    toast.success("Deleted Post!", {
+      position: toast.POSITION.TOP_CENTER,
+    });
+  };
 
   //get user profile info move to redux later
   useEffect(() => {
@@ -50,8 +57,19 @@ const Post = ({ post }) => {
     setHasLiked(!hasLiked);
   };
 
+  //handle delete post
+  const deletePost = async () => {
+    setPosts(posts.filter((p) => p._id !== post._id));
+
+    await axios.delete(`http://localhost:5000/api/posts/${post._id}`, {
+      data: { userId: post.userId },
+    });
+    notify();
+  };
+
   return (
     <div className="bg-white m-5 shadow-md rounded-lg p-2 relative  ">
+      <ToastContainer autoClose={1000} />
       <div className="  flex justify-between items-center relative p-2">
         <div className="flex items-center">
           <img
@@ -68,17 +86,9 @@ const Post = ({ post }) => {
             <p className="text-sm text-gray-500">{format(post.createdAt)}</p>
           </div>
         </div>
-        <MoreVertIcon
-          onClick={() => setShowMore(!showMore)}
-          className="cursor-pointer"
-        />
-        {showMore && (
-          <div className=" bg-gray-50 hover:bg-gray-100 border text-red-500 border-gray-500 p-2 absolute -bottom-5 h-10 w-24 -right-6 shadow-md rounded-lg">
-            <p className=" hover:cursor-pointer">
-              <b>Delete Post</b>{" "}
-            </p>
-          </div>
-        )}
+
+        {/* show more here */}
+        <ShowMore actionText="Delete Post" actionFunction={deletePost} />
       </div>
       <div className=" text-gray-600 pt-2 pb-2 p-2">
         <p>{post.desc}</p>
@@ -110,6 +120,7 @@ const Post = ({ post }) => {
             )}
 
             <p className="ml-1">{like}</p>
+            {hasLiked && <p className="ml-2 text-gray-500">You liked this</p>}
           </div>
         </div>
         <div className="flex ml-3" onClick={() => setShowModel(!showModal)}>

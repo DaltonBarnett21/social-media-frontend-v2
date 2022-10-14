@@ -2,11 +2,10 @@ import React from "react";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { format } from "timeago.js";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
+import ShowMore from "../utilities/ShowMore";
 
 const Comment = ({ commentData, comments, setComments, commentId, postId }) => {
   const [user, setUser] = useState();
-  const [show, setShow] = useState(false);
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -51,27 +50,19 @@ const Comment = ({ commentData, comments, setComments, commentId, postId }) => {
             <p>
               {user?.firstname} {user?.lastname}
             </p>
-            <p className="ml-2 text-gray-500">{format(user?.createdAt)}</p>
+            <p className="ml-2 text-gray-500">
+              {format(commentData?.createdAt)}
+            </p>
           </div>
           <div>
             <p>{commentData?.comment}</p>
           </div>
         </div>
 
-        <MoreVertIcon
-          onClick={() => setShow(!show)}
-          className="cursor-pointer"
+        <ShowMore
+          actionText="Delete Comment"
+          actionFunction={handleDeleteComment}
         />
-        {show && (
-          <div
-            onClick={handleDeleteComment}
-            className=" bg-gray-50 z-50 hover:bg-gray-100 border text-red-500 border-gray-500 p-2 absolute -bottom-5 h-10 w-30 -right-2 shadow-md rounded-lg"
-          >
-            <p className=" hover:cursor-pointer">
-              <b>Delete Comment</b>{" "}
-            </p>
-          </div>
-        )}
       </div>
     </div>
   );
