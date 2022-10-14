@@ -6,9 +6,9 @@ import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { motion, AnimatePresence } from "framer-motion";
-
 import Comment from "../comments/Comment";
 import CreateComment from "../createComment/CreateComment";
+import { format } from "timeago.js";
 
 const Post = ({ post }) => {
   const [user, setUser] = useState({});
@@ -65,7 +65,7 @@ const Post = ({ post }) => {
             <p className=" font-bold">
               {user.firstname} {user.lastname}
             </p>
-            <p className=" mt-0 text-gray-500">@{user.username}</p>
+            <p className="text-sm text-gray-500">{format(post.createdAt)}</p>
           </div>
         </div>
         <MoreVertIcon
@@ -128,25 +128,30 @@ const Post = ({ post }) => {
       <AnimatePresence>
         {showModal && (
           <motion.div
-            initial={{ y: 0, opacity: 0 }}
+            initial={{ height: 0, opacity: 0 }}
             animate={{
               height: "200px",
               opacity: 1,
               transition: {
-                duration: 0.6,
+                duration: 0.3,
               },
             }}
             exit={{
-              height: 0,
-              opacity: 0,
               transition: {
-                duration: 0.2,
+                duration: 0.6,
               },
             }}
             className=" bg-gray-100 p-2 overflow-y-auto relative mb-20 "
           >
-            {comments.map((c, i) => (
-              <Comment key={i} commentData={c} />
+            {comments.map((c) => (
+              <Comment
+                key={c._id}
+                commentData={c}
+                comments={comments}
+                setComments={setComments}
+                commentId={c._id}
+                postId={post._id}
+              />
             ))}
           </motion.div>
         )}
