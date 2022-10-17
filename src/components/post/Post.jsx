@@ -11,6 +11,7 @@ import { format } from "timeago.js";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ShowMore from "../utilities/ShowMore";
+import { PodcastsTwoTone } from "@mui/icons-material";
 
 const Post = ({ post, posts, setPosts }) => {
   const [user, setUser] = useState({});
@@ -92,12 +93,12 @@ const Post = ({ post, posts, setPosts }) => {
       </div>
       <div className=" text-gray-600 pt-2 pb-2 p-2">
         <p>{post.desc}</p>
-        <div className="mt-2">
-          {/* <img
-            src="/post.jpg"
-            className="w-full object-cover rounded-lg "
+        <div className="mt-5 shadow-lg">
+          <img
+            src={post?.img}
+            className="w-full object-cover rounded-lg  "
             alt=""
-          /> */}
+          />
         </div>
       </div>
       <div

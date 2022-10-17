@@ -8,18 +8,26 @@ import { useSelector } from "react-redux";
 const Feed = () => {
   const [posts, setPosts] = useState([]);
   const postState = useSelector((state) => state.post);
+  const userState = useSelector((state) => state.user);
 
   useEffect(() => {
     setPosts([]);
     const fetchPosts = async () => {
-      const res = await axios.get(
-        "http://localhost:5000/api/posts/timeline/6346e10d6d1c8f98968f1b14"
-      );
-      setPosts(
-        res.data.sort((p1, p2) => {
-          return new Date(p2.createdAt) - new Date(p1.createdAt);
+      await axios
+        .get(`/api/posts/timeline/6346e10d6d1c8f98968f1b14`, {
+          withCredentials: true,
+          contentType: "application/json",
         })
-      );
+        .then((res) => {
+          setPosts(
+            res.data.sort((p1, p2) => {
+              return new Date(p2.createdAt) - new Date(p1.createdAt);
+            })
+          );
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     };
     fetchPosts();
   }, [postState]);
