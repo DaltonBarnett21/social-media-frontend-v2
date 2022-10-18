@@ -6,6 +6,7 @@ import ShowMore from "../utilities/ShowMore";
 
 const Comment = ({ commentData, comments, setComments, commentId, postId }) => {
   const [user, setUser] = useState();
+  const profilePicture = localStorage.getItem("profilePicture");
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -37,7 +38,7 @@ const Comment = ({ commentData, comments, setComments, commentId, postId }) => {
     <div className="mt-3 flex items-center ">
       <div className=" shrink-0 ">
         <img
-          src="/me.jpg"
+          src={profilePicture ? profilePicture : "/no-avatar.png"}
           height="40px"
           width="40px"
           className=" rounded-full object-cover cursor-pointer ml-1"

@@ -18,6 +18,7 @@ const Post = ({ post, posts, setPosts }) => {
   const [like, setLike] = useState(post.likes.length);
   const [showModal, setShowModel] = useState(false);
   const [hasLiked, setHasLiked] = useState(false);
+  const profilePicture = localStorage.getItem("profilePicture");
   const [comments, setComments] = useState();
   const [hasCommented, setHasCommented] = useState(false);
 
@@ -52,9 +53,14 @@ const Post = ({ post, posts, setPosts }) => {
   //handleLikes
   const handleLikes = async () => {
     setLike(hasLiked ? like - 1 : like + 1);
-    await axios.put(`http://localhost:5000/api/posts/${post._id}/like`, {
-      userId: post.userId,
-    });
+    console.log(post.likes);
+    await axios.put(
+      `http://localhost:5000/api/posts/${post._id}/like`,
+      {
+        userId: post.userId,
+      },
+      { withCredentials: true, contentType: "application/json" }
+    );
     setHasLiked(!hasLiked);
   };
 
@@ -74,7 +80,7 @@ const Post = ({ post, posts, setPosts }) => {
       <div className="  flex justify-between items-center relative p-2">
         <div className="flex items-center">
           <img
-            src="/me.jpg"
+            src={profilePicture ? profilePicture : "/no-avatar.png"}
             height="55px"
             width="55px"
             className=" rounded-full object-cover cursor-pointer"

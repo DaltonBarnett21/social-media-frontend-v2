@@ -4,6 +4,7 @@ import LocalPostOfficeIcon from "@mui/icons-material/LocalPostOffice";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 
 const Header = () => {
+  const profilePicture = localStorage.getItem("profilePicture");
   return (
     <div className="sticky top-0 bg-white  z-50">
       <div className="flex justify-between  p-5">
@@ -37,7 +38,7 @@ const Header = () => {
             </span>
           </div>
           <img
-            src="/me.jpg"
+            src={profilePicture ? profilePicture : "/no-avatar.png"}
             height="35px"
             width="35px"
             className=" rounded-full object-cover cursor-pointer mr-1"

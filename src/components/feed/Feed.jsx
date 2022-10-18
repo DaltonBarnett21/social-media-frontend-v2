@@ -8,13 +8,13 @@ import { useSelector } from "react-redux";
 const Feed = () => {
   const [posts, setPosts] = useState([]);
   const postState = useSelector((state) => state.post);
-  const userState = useSelector((state) => state.user);
+  const userId = localStorage.getItem("id");
 
   useEffect(() => {
     setPosts([]);
     const fetchPosts = async () => {
       await axios
-        .get(`/api/posts/timeline/6346e10d6d1c8f98968f1b14`, {
+        .get(`/api/posts/timeline/${userId}`, {
           withCredentials: true,
           contentType: "application/json",
         })

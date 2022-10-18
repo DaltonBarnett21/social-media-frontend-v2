@@ -1,6 +1,5 @@
 import React from "react";
 import PhotoLibraryIcon from "@mui/icons-material/PhotoLibrary";
-import EmojiEmotionsIcon from "@mui/icons-material/EmojiEmotions";
 import SendIcon from "@mui/icons-material/Send";
 import { useEffect, useState, useRef } from "react";
 import axios from "axios";
@@ -18,6 +17,8 @@ const CreatePost = () => {
   const [imageBoxIsOpen, setImageBoxIsOpen] = useState(false);
   const [isDisabled, setIsDisabled] = useState(true);
   const [user, setUser] = useState({});
+  const userId = localStorage.getItem("id");
+  const profilePicture = localStorage.getItem("profilePicture");
   const [post, setPost] = useState({
     desc: "",
   });
@@ -30,9 +31,7 @@ const CreatePost = () => {
 
   useEffect(() => {
     const fetchPosts = async () => {
-      const res = await axios.get(
-        `http://localhost:5000/api/users/6346e10d6d1c8f98968f1b14`
-      );
+      const res = await axios.get(`http://localhost:5000/api/users/${userId}`);
       setUser(res.data);
     };
     fetchPosts();
@@ -56,18 +55,21 @@ const CreatePost = () => {
     formData.append("image", image);
     formData.append("desc", post.desc);
     if (image) {
-      await axios.post(
-        "http://localhost:5000/api/images/6346e10d6d1c8f98968f1b14",
-        formData,
-        {
-          headers: { "Content-Type": "multipart/form-data" },
-        }
-      );
-    } else {
-      await axios.post("http://localhost:5000/api/posts", {
-        userId: "6346e10d6d1c8f98968f1b14",
-        desc: post.desc,
+      await axios.post(`http://localhost:5000/api/images/${userId}`, formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+        withCredentials: true,
+        contentType: "application/json",
       });
+      console.log("I was called");
+    } else {
+      await axios.post(
+        `http://localhost:5000/api/posts/${userId}`,
+        {
+          userId: userId,
+          desc: post.desc,
+        },
+        { withCredentials: true, contentType: "application/json" }
+      );
     }
 
     setIsDisabled(true);
@@ -101,7 +103,7 @@ const CreatePost = () => {
       <form onSubmit={handleSubmit} className=" ">
         <div className="flex p-2 ">
           <img
-            src="/me.jpg"
+            src={profilePicture ? profilePicture : "/no-avatar.png"}
             height="55px"
             width="55px"
             className=" rounded-full object-cover cursor-pointer"

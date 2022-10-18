@@ -28,6 +28,10 @@ const Login = () => {
       .post("/api/auth/login", loginState)
       .then((res) => {
         dispatch(update(res.data));
+         
+        localStorage.setItem("id", res.data.id);
+        localStorage.setItem("profilePicture", res.data.profilePicture);
+        localStorage.setItem("coverPicture", res.data.coverPicture);
         navigate("/");
       })
       .catch((err) => {

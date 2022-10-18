@@ -2,9 +2,7 @@ import React from "react";
 import Header from "../../components/Header/Header";
 import Leftbar from "../../components/leftbar/Leftbar";
 import NavMenu from "../../components/mobile/NavMenu";
-
 import Rightbar from "../../components/rightbar/Rightbar";
-
 import Feed from "../../components/feed/Feed";
 
 const Home = () => {

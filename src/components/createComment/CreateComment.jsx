@@ -11,6 +11,7 @@ const CreateComment = ({
 }) => {
   const inputRef = useRef();
   const [isDisabled, setIsDisabled] = useState(true);
+  const profilePicture = localStorage.getItem("profilePicture");
   const [comment, setComment] = useState({
     userId: "6346e10d6d1c8f98968f1b14",
     comment: "",
@@ -49,7 +50,7 @@ const CreateComment = ({
       className="p-2 flex absolute bottom-0 z-50 w-[98%] bg-white    items-center"
     >
       <img
-        src="/me.jpg"
+        src={profilePicture ? profilePicture : "/no-avatar.png"}
         height="40px"
         width="40px"
         className=" rounded-full object-cover cursor-pointer"
