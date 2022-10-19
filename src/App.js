@@ -20,7 +20,7 @@ function App() {
                 </ProtectedRoute>
               }
             />
-            <Route path="/:id" element={<Profile />} />
+            <Route path="/user/:id" element={<Profile />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
           </Routes>

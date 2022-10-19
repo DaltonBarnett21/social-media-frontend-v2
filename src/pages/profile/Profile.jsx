@@ -1,10 +1,61 @@
-import React from "react";
+import React, { useState } from "react";
 import Header from "../../components/Header/Header";
 import Leftbar from "../../components/leftbar/Leftbar";
 import NavMenu from "../../components/mobile/NavMenu";
 import Post from "../../components/post/Post";
+import { useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
+import axios, { AxiosHeaders } from "axios";
+import { useEffect } from "react";
 
 const Profile = () => {
+  const user = useSelector((state) => state.user);
+  const [userProfile, setUserProfile] = useState();
+  const [posts, setPosts] = useState();
+  let { id } = useParams();
+
+  useEffect(() => {
+    const getProfile = async () => {
+      await axios
+        .get(`http://localhost:5000/api/profile/${id}`)
+        .then((res) => {
+          setUserProfile(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+    getProfile();
+  }, []);
+
+  useEffect(() => {
+    const getUserPosts = async () => {
+      await axios
+        .get(`http://localhost:5000/api/posts/timeline/${id}?profilePosts=true`)
+        .then((res) => {
+          setPosts(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+
+    getUserPosts();
+  }, []);
+
+  const handleFeedState = (isPrivate) => {
+    switch (isPrivate) {
+      case true:
+        return <p>Users post are private</p>;
+      case false:
+        return posts?.map((p, i) => (
+          <Post key={i} post={p} posts={posts} setPosts={setPosts} />
+        ));
+      default:
+        return <p>You have no post!</p>;
+    }
+  };
+
   return (
     <div className="  h-screen relative">
       <Header />
@@ -23,35 +74,31 @@ const Profile = () => {
           </div>
           <div className="  mt-12  flex justify-center">
             <div className=" text-center">
-              <p className=" font-bold">Dalton Barnett</p>
-              <button className="p-1 w-24 text-white bg-sky-500 hover:bg-sky-600 mt-2">
-                + Follow
-              </button>
+              <p className=" font-bold">
+                {user.firstname} {user.lastname}
+              </p>
+              {user.id === id ? null : (
+                <button className="p-1 w-24 text-white bg-sky-500 hover:bg-sky-600 mt-2">
+                  + Follow
+                </button>
+              )}
+
               <p className="mt-5 text-gray-500 w-full p-2  lg:w-3/4 mx-auto">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Animi,
-                nemo commodi quidem dolor explicabo consequatur deleniti impedit
-                saepe quam, sapiente ab aliquid itaque asperiores recusandae
-                facere et consectetur illo suscipit! Lorem ipsum dolor sit amet
-                consectetur adipisicing elit. Animi, nemo commodi quidem dolor
-                explicabo consequatur deleniti impedit saepe quam, sapiente ab
-                aliquid itaque asperiores recusandae facere et consectetur illo
-                suscipit!
+                {userProfile?.about}
               </p>
             </div>
           </div>
           <div className="flex">
-            <div className="flex-1 lg:flex-[2]">
-              <Post />
-              <Post />
-              <Post />
+            <div className="flex-1 lg:flex-[2] mt-10">
+              {handleFeedState(userProfile?.isPrivate)}
             </div>
             <div className="hidden lg:block lg:flex-1 mt-10  ">
               <div className="flex mt-8 items-center justify-between">
-                <h2 className="text-lg">Daltons Friends</h2>
+                <h2 className="text-lg">{user.firstname}s Friends</h2>
                 <p className=" text-sky-600 cursor-pointer">See More...</p>
               </div>
 
-              <div className="grid sm:grid-cols-2 lg:grid-cols-2 gap-9 mt-5 p-4 ">
+              <div className="grid sm:grid-cols-2 lg:grid-cols-2 gap-9 mt-5 p-4 w-80 ">
                 <div className="flex ">
                   <img
                     src="/me.jpg"
