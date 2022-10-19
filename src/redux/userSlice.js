@@ -4,20 +4,18 @@ export const userSlice = createSlice({
   name: "user",
   initialState: {
     id: "",
-    email: "",
     username: "",
-    firstName: "",
-    lastName: "",
+    firstname: "",
+    lastname: "",
     profilePicture: "",
     coverPicture: "",
   },
   reducers: {
     update: (state, action) => {
       state.id = action.payload.id;
-      state.email = action.payload.email;
       state.username = action.payload.username;
-      state.firstName = action.payload.firstName;
-      state.lastName = action.payload.lastName;
+      state.firstname = action.payload.firstname;
+      state.lastname = action.payload.lastname;
       state.profilePicture = action.payload.profilePicture;
       state.coverPicture = action.payload.coverPicture;
     },

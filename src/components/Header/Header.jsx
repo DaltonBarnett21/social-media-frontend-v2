@@ -2,9 +2,11 @@ import React from "react";
 import SearchIcon from "@mui/icons-material/Search";
 import LocalPostOfficeIcon from "@mui/icons-material/LocalPostOffice";
 import NotificationsIcon from "@mui/icons-material/Notifications";
+import { useSelector } from "react-redux";
 
 const Header = () => {
-  const profilePicture = localStorage.getItem("profilePicture");
+  const user = useSelector((state) => state.user);
+
   return (
     <div className="sticky top-0 bg-white  z-50">
       <div className="flex justify-between  p-5">
@@ -38,13 +40,15 @@ const Header = () => {
             </span>
           </div>
           <img
-            src={profilePicture ? profilePicture : "/no-avatar.png"}
+            src={user.profilePicture ? user.profilePicture : "/no-avatar.png"}
             height="35px"
             width="35px"
             className=" rounded-full object-cover cursor-pointer mr-1"
             alt=""
           />
-          <p className="text-gray-600 cursor-pointer">Dalton Barnett</p>
+          <p className="text-gray-600 cursor-pointer">
+            {user.firstname} {user.lastname}
+          </p>
         </div>
       </div>
     </div>

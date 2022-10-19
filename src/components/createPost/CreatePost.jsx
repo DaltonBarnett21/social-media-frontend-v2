@@ -1,9 +1,9 @@
 import React from "react";
 import PhotoLibraryIcon from "@mui/icons-material/PhotoLibrary";
 import SendIcon from "@mui/icons-material/Send";
-import { useEffect, useState, useRef } from "react";
+import { useState, useRef } from "react";
 import axios from "axios";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { update } from "../../redux/postSlice";
 import { toast, ToastContainer } from "react-toastify";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
@@ -16,9 +16,8 @@ const CreatePost = () => {
   const [image, setImage] = useState();
   const [imageBoxIsOpen, setImageBoxIsOpen] = useState(false);
   const [isDisabled, setIsDisabled] = useState(true);
-  const [user, setUser] = useState({});
-  const userId = localStorage.getItem("id");
-  const profilePicture = localStorage.getItem("profilePicture");
+  const user = useSelector((state) => state.user);
+
   const [post, setPost] = useState({
     desc: "",
   });
@@ -28,14 +27,6 @@ const CreatePost = () => {
       position: toast.POSITION.TOP_CENTER,
     });
   };
-
-  useEffect(() => {
-    const fetchPosts = async () => {
-      const res = await axios.get(`http://localhost:5000/api/users/${userId}`);
-      setUser(res.data);
-    };
-    fetchPosts();
-  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -55,17 +46,20 @@ const CreatePost = () => {
     formData.append("image", image);
     formData.append("desc", post.desc);
     if (image) {
-      await axios.post(`http://localhost:5000/api/images/${userId}`, formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-        withCredentials: true,
-        contentType: "application/json",
-      });
-      console.log("I was called");
+      await axios.post(
+        `http://localhost:5000/api/images/${user.id}`,
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+          withCredentials: true,
+          contentType: "application/json",
+        }
+      );
     } else {
       await axios.post(
-        `http://localhost:5000/api/posts/${userId}`,
+        `http://localhost:5000/api/posts/${user.id}`,
         {
-          userId: userId,
+          userId: user.id,
           desc: post.desc,
         },
         { withCredentials: true, contentType: "application/json" }
@@ -103,7 +97,7 @@ const CreatePost = () => {
       <form onSubmit={handleSubmit} className=" ">
         <div className="flex p-2 ">
           <img
-            src={profilePicture ? profilePicture : "/no-avatar.png"}
+            src={user.profilePicture ? user.profilePicture : "/no-avatar.png"}
             height="55px"
             width="55px"
             className=" rounded-full object-cover cursor-pointer"
@@ -164,6 +158,7 @@ const CreatePost = () => {
           </>
         )}
       </form>
+
       {imagePreview && (
         <div className="mt-10 pl-12 pr-12 pb-10 relative">
           <HighlightOffIcon

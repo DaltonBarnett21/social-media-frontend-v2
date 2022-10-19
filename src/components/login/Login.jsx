@@ -27,11 +27,8 @@ const Login = () => {
     await axios
       .post("/api/auth/login", loginState)
       .then((res) => {
-        dispatch(update(res.data));
-         
-        localStorage.setItem("id", res.data.id);
-        localStorage.setItem("profilePicture", res.data.profilePicture);
-        localStorage.setItem("coverPicture", res.data.coverPicture);
+        localStorage.setItem("token", res.data.token);
+        dispatch(update(res.data.details));
         navigate("/");
       })
       .catch((err) => {
