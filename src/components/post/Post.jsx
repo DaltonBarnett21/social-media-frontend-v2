@@ -11,14 +11,14 @@ import { format } from "timeago.js";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ShowMore from "../utilities/ShowMore";
-import { PodcastsTwoTone } from "@mui/icons-material";
+import { useSelector } from "react-redux";
 
 const Post = ({ post, posts, setPosts }) => {
   const [user, setUser] = useState({});
+  const userProfilePicture = useSelector((state) => state.user.profilePicture);
   const [like, setLike] = useState(post.likes.length);
   const [showModal, setShowModel] = useState(false);
   const [hasLiked, setHasLiked] = useState(false);
-  const profilePicture = localStorage.getItem("profilePicture");
   const [comments, setComments] = useState();
   const [hasCommented, setHasCommented] = useState(false);
 
@@ -79,13 +79,14 @@ const Post = ({ post, posts, setPosts }) => {
       <ToastContainer autoClose={1000} />
       <div className="  flex justify-between items-center relative p-2">
         <div className="flex items-center">
-          <img
-            src={profilePicture ? profilePicture : "/no-avatar.png"}
-            height="55px"
-            width="55px"
-            className=" rounded-full object-cover cursor-pointer"
-            alt=""
-          />
+          <div className="flex h-12  w-12">
+            <img
+              src={userProfilePicture ? userProfilePicture : "/no-avatar.png"}
+              className=" rounded-full max-w-full h-full object-cover cursor-pointer"
+              alt=""
+            />
+          </div>
+
           <div className="flex flex-col ml-2 text-sm cursor-pointer">
             <p className=" font-bold">
               {user.firstname} {user.lastname}
@@ -97,8 +98,8 @@ const Post = ({ post, posts, setPosts }) => {
         {/* show more here */}
         <ShowMore actionText="Delete Post" />
       </div>
-      <div className=" text-gray-600 pt-2 pb-2 p-2">
-        <p>{post.desc}</p>
+      <div className=" text-gray-600 pt-2 pb-2 p-3">
+        <p>{post?.desc}</p>
         <div className="mt-5 shadow-lg">
           <img
             src={post?.img}

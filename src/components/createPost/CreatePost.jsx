@@ -95,12 +95,10 @@ const CreatePost = () => {
         hideProgressBar={true}
       />
       <form onSubmit={handleSubmit} className=" ">
-        <div className="flex p-2 ">
+        <div className="flex p-3 h-16 w-16 ">
           <img
             src={user.profilePicture ? user.profilePicture : "/no-avatar.png"}
-            height="55px"
-            width="55px"
-            className=" rounded-full object-cover cursor-pointer"
+            className=" rounded-full max-w-full h-full  object-cover cursor-pointer"
             alt=""
           />
           <div className="flex flex-col ml-2 text-sm cursor-pointer">

@@ -3,10 +3,11 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { format } from "timeago.js";
 import ShowMore from "../utilities/ShowMore";
+import { useSelector } from "react-redux";
 
 const Comment = ({ commentData, comments, setComments, commentId, postId }) => {
   const [user, setUser] = useState();
-  const profilePicture = localStorage.getItem("profilePicture");
+  const profilePicture = useSelector((state) => state.user.profilePicture);
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -36,12 +37,10 @@ const Comment = ({ commentData, comments, setComments, commentId, postId }) => {
 
   return (
     <div className="mt-3 flex items-center ">
-      <div className=" shrink-0 ">
+      <div className="h-12 w-12 ">
         <img
           src={profilePicture ? profilePicture : "/no-avatar.png"}
-          height="40px"
-          width="40px"
-          className=" rounded-full object-cover cursor-pointer ml-1"
+          className=" rounded-full object-cover cursor-pointer ml-1 max-w-full h-full"
           alt=""
         />
       </div>

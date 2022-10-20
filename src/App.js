@@ -5,10 +5,12 @@ import Register from "./components/register/Register";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ProtectedRoute from "./protectedRoute/ProtectedRoute";
 import AppContainer from "./components/appContainer/AppContainer";
+import SetupProfile from "./components/setupProfile/SetupProfile";
 
 function App() {
   return (
     <>
+      {/* <SetupProfile /> */}
       <AppContainer>
         <BrowserRouter>
           <Routes>

@@ -60,15 +60,18 @@ const Header = () => {
           <div className="flex items-center ">
             <Link to={`/user/${user.id}`}>
               <div className="flex items-center ">
-                <img
-                  src={
-                    user.profilePicture ? user.profilePicture : "/no-avatar.png"
-                  }
-                  height="35px"
-                  width="35px"
-                  className=" rounded-full object-cover cursor-pointer mr-2"
-                  alt=""
-                />
+                <div className="flex h-8 w-8 mr-2">
+                  <img
+                    src={
+                      user.profilePicture
+                        ? user.profilePicture
+                        : "/no-avatar.png"
+                    }
+                    className=" rounded-full max-w-full h-full object-cover cursor-pointer "
+                    alt=""
+                  />
+                </div>
+
                 <p className="text-gray-600 cursor-pointer mr-2">
                   {user.firstname} {user.lastname}
                 </p>

@@ -3,16 +3,18 @@ import Header from "../../components/Header/Header";
 import Leftbar from "../../components/leftbar/Leftbar";
 import NavMenu from "../../components/mobile/NavMenu";
 import Post from "../../components/post/Post";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import axios, { AxiosHeaders } from "axios";
+import axios from "axios";
 import { useEffect } from "react";
 import CameraAltIcon from "@mui/icons-material/CameraAlt";
 
 const Profile = () => {
   const user = useSelector((state) => state.user);
+  const [newProfileImage, setNewProfileImage] = useState();
   const [userProfile, setUserProfile] = useState();
   const [posts, setPosts] = useState();
+  const navigate = useNavigate();
   let { id } = useParams();
 
   useEffect(() => {
@@ -44,6 +46,31 @@ const Profile = () => {
     getUserPosts();
   }, []);
 
+  const handleProfileImageChange = (e) => {
+    setNewProfileImage(e.target.files[0]);
+  };
+
+  // useEffect(() => {
+  //   const formdata = new FormData();
+  //   formdata.append("image", newProfileImage);
+  //   const updateProfileImage = async () => {
+  //     await axios
+  //       .put(
+  //         `http://localhost:5000/api/images/${user.id}/profile-image`,
+  //         formdata,
+  //         {
+  //           headers: { "Content-Type": "multipart/form-data" },
+  //           withCredentials: true,
+  //           contentType: "application/json",
+  //         }
+  //       )
+  //       .then((res) => {
+  //         navigate(0);
+  //       });
+  //   };
+  //   updateProfileImage();
+  // }, [imageIsLoaded]);
+
   const handleFeedState = (isPrivate) => {
     switch (isPrivate) {
       case true:
@@ -66,16 +93,32 @@ const Profile = () => {
         </div>
         <div className="flex-1 lg:block lg:flex-[5] lg:p-10">
           <div className=" relative">
-            <img src="/post.jpg" alt="" className="w-full h-52 object-cover" />
             <img
-              src="/no-avatar.png"
+              src={
+                user.coverPicture
+                  ? user.coverPicture
+                  : "/No-Image-Placeholder.svg.png"
+              }
+              alt=""
+              className="w-full h-52 object-cover"
+            />
+            <img
+              src={user.profilePicture ? user.profilePicture : "/no-avatar.png"}
               alt=""
               className="h-24 w-24 rounded-full object-cover absolute left-0 right-0 mx-auto top-[150px] border border-white"
             />
+            {/* <div className="absolute left-[48%] top-[220px] right-1/2 hover:cursor-pointer z-50 w-full">
+              <input
+                type="file"
+                className=" hover:cursor-pointer opacity-0 "
+                onChange={handleProfileImageChange}
+              />
+            </div>
+
             <CameraAltIcon
               font={25}
               className="absolute left-0 right-0 mx-auto top-[230px] text-gray-400 hover:cursor-pointer"
-            />
+            /> */}
           </div>
           <div className="  mt-12  flex justify-center">
             <div className=" text-center">

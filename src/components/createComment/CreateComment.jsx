@@ -1,6 +1,7 @@
 import React from "react";
 import SendIcon from "@mui/icons-material/Send";
 import { useState, useRef } from "react";
+import { useSelector } from "react-redux";
 import axios from "axios";
 
 const CreateComment = ({
@@ -12,6 +13,7 @@ const CreateComment = ({
   const inputRef = useRef();
   const [isDisabled, setIsDisabled] = useState(true);
   const profilePicture = localStorage.getItem("profilePicture");
+  const user = useSelector((state) => state.user);
   const [comment, setComment] = useState({
     userId: "6346e10d6d1c8f98968f1b14",
     comment: "",
@@ -49,13 +51,14 @@ const CreateComment = ({
       onSubmit={handleSubmit}
       className="p-2 flex absolute bottom-0 z-50 w-[98%] bg-white    items-center"
     >
-      <img
-        src={profilePicture ? profilePicture : "/no-avatar.png"}
-        height="40px"
-        width="40px"
-        className=" rounded-full object-cover cursor-pointer"
-        alt=""
-      />
+      <div className="h-9 w-12">
+        <img
+          src={user.profilePicture ? user.profilePicture : "/no-avatar.png"}
+          className=" rounded-full object-cover cursor-pointer max-w-full h-full"
+          alt=""
+        />
+      </div>
+
       <input
         type="text"
         autoComplete="off"
