@@ -95,7 +95,7 @@ const Post = ({ post, posts, setPosts }) => {
         </div>
 
         {/* show more here */}
-        <ShowMore actionText="Delete Post" actionFunction={deletePost} />
+        <ShowMore actionText="Delete Post" />
       </div>
       <div className=" text-gray-600 pt-2 pb-2 p-2">
         <p>{post.desc}</p>

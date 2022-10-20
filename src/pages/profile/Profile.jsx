@@ -7,6 +7,7 @@ import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import axios, { AxiosHeaders } from "axios";
 import { useEffect } from "react";
+import CameraAltIcon from "@mui/icons-material/CameraAlt";
 
 const Profile = () => {
   const user = useSelector((state) => state.user);
@@ -67,9 +68,13 @@ const Profile = () => {
           <div className=" relative">
             <img src="/post.jpg" alt="" className="w-full h-52 object-cover" />
             <img
-              src="/me.jpg"
+              src="/no-avatar.png"
               alt=""
               className="h-24 w-24 rounded-full object-cover absolute left-0 right-0 mx-auto top-[150px] border border-white"
+            />
+            <CameraAltIcon
+              font={25}
+              className="absolute left-0 right-0 mx-auto top-[230px] text-gray-400 hover:cursor-pointer"
             />
           </div>
           <div className="  mt-12  flex justify-center">

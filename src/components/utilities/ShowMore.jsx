@@ -1,33 +1,21 @@
-import React, { useState, useRef } from "react";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import { useDetectOutsideClick } from "../../hooks/useDetectOutsideClick";
+import { Menu, MenuHandler, MenuList } from "@material-tailwind/react";
 
-const ShowMore = ({ actionText, actionFunction }) => {
-  const [showMore, setShowMore] = useState(false);
-  const divRef = useRef(null);
-  useDetectOutsideClick(divRef, setShowMore, showMore);
-
-  const handleOpenAndClose = () => {
-    actionFunction();
-    setShowMore(!showMore);
-  };
+const ShowMore = ({ actionText }) => {
   return (
     <>
-      <MoreVertIcon
-        onClick={() => setShowMore(!showMore)}
-        className="cursor-pointer"
-      />
-      {showMore && (
-        <div
-          onClick={handleOpenAndClose}
-          className="hover:cursor-pointer bg-gray-50 hover:bg-gray-100 border text-red-500 border-gray-500 p-2 absolute -bottom-5  -right-6 shadow-xl rounded-lg"
-          ref={divRef}
-        >
-          <p>
-            <b>{actionText}</b>
-          </p>
-        </div>
-      )}
+      <Menu>
+        <MenuHandler>
+          <MoreVertIcon className="cursor-pointer" />
+        </MenuHandler>
+        <MenuList>
+          <div className="hover:cursor-pointer w-24 h-12 bg-gray-50 hover:bg-gray-100 border  text-red-500 border-gray-500 flex justify-center items-center p-1 absolute -bottom-5  -right-6 shadow-xl rounded-lg">
+            <p className="text-sm">
+              <b>{actionText}</b>
+            </p>
+          </div>
+        </MenuList>
+      </Menu>
     </>
   );
 };

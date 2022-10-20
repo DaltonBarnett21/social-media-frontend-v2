@@ -3,14 +3,25 @@ import GroupIcon from "@mui/icons-material/Group";
 import HomeIcon from "@mui/icons-material/Home";
 import GroupsIcon from "@mui/icons-material/Groups";
 import StoreMallDirectoryIcon from "@mui/icons-material/StoreMallDirectory";
+import { Link, useNavigate } from "react-router-dom";
+import LogoutIcon from "@mui/icons-material/Logout";
 
 const Leftbar = () => {
+  const navigate = useNavigate();
+
+  const logout = () => {
+    localStorage.removeItem("token");
+    navigate("/login");
+  };
+
   return (
     <div className="sticky top-20 ">
       <div className="p-5 text-lg ">
         <div className="mt-8 cursor-pointer flex items-center">
-          <HomeIcon className=" text-sky-500 mr-2" />
-          <span className=" text-gray-500">Home</span>
+          <Link to="/">
+            <HomeIcon className=" text-sky-500 mr-2" />
+            <span className=" text-gray-500">Home</span>
+          </Link>
         </div>
         <div className="mt-8 cursor-pointer flex items-center">
           <GroupIcon className=" text-sky-500 mr-2" />
@@ -23,6 +34,10 @@ const Leftbar = () => {
         <div className="mt-8 cursor-pointer flex items-center">
           <StoreMallDirectoryIcon className=" text-sky-500 mr-2" />
           <span className=" text-gray-500">Market Place</span>
+        </div>
+        <div className="mt-8 cursor-pointer flex items-center" onClick={logout}>
+          <LogoutIcon className=" text-sky-500 mr-2" />
+          <span className=" text-gray-500">Logout</span>
         </div>
         <hr className="mt-8" />
         <div className="flex justify-between">

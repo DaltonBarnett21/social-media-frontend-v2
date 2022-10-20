@@ -1,36 +1,9 @@
 import React from "react";
-import RedeemIcon from "@mui/icons-material/Redeem";
 
 const Rightbar = () => {
   return (
     <div>
       <div className="p-5 sticky top-0">
-        <h2 className="mt-8 text-xl">Upcoming Birthdays</h2>
-        <div className="flex mt-8 text-sm text-gray-500 items-center">
-          <RedeemIcon className=" text-purple-600 mr-2" />
-          <p>
-            <b className=" font-bold">
-              John Smith has a upcoming Birthday on October 15th
-            </b>
-          </p>
-        </div>
-        <div className="flex mt-5 text-sm text-gray-500 items-center">
-          <RedeemIcon className=" text-purple-600 mr-2" />
-          <p>
-            <b className=" font-bold">
-              John Smith has a upcoming Birthday on October 15th
-            </b>
-          </p>
-        </div>
-        <div className="flex mt-5 text-sm text-gray-500 items-center">
-          <RedeemIcon className=" text-purple-600 mr-2" />
-          <p>
-            <b className=" font-bold">
-              John Smith has a upcoming Birthday on October 15th
-            </b>
-          </p>
-        </div>
-        <p className="mt-8 text-sky-600 cursor-pointer">See More...</p>
         <h2 className="mt-8 text-xl">Online Friends</h2>
         <div className="flex mt-8 relative">
           <img
