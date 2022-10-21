@@ -10,8 +10,7 @@ import { useEffect } from "react";
 import CameraAltIcon from "@mui/icons-material/CameraAlt";
 
 const Profile = () => {
-  const user = useSelector((state) => state.user);
-  const [newProfileImage, setNewProfileImage] = useState();
+  const [user, setUser] = useState();
   const [userProfile, setUserProfile] = useState();
   const [posts, setPosts] = useState();
   const navigate = useNavigate();
@@ -29,12 +28,26 @@ const Profile = () => {
         });
     };
     getProfile();
-  }, []);
+  }, [id]);
+
+  useEffect(() => {
+    const getUser = async () => {
+      await axios
+        .get(`http://localhost:5000/api/users/${id}`)
+        .then((res) => {
+          setUser(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+    getUser();
+  }, [id]);
 
   useEffect(() => {
     const getUserPosts = async () => {
       await axios
-        .get(`http://localhost:5000/api/posts/timeline/${id}?profilePosts=true`)
+        .get(`http://localhost:5000/api/posts/timeline/${id}`)
         .then((res) => {
           setPosts(res.data);
         })
@@ -44,11 +57,7 @@ const Profile = () => {
     };
 
     getUserPosts();
-  }, []);
-
-  const handleProfileImageChange = (e) => {
-    setNewProfileImage(e.target.files[0]);
-  };
+  }, [id]);
 
   // useEffect(() => {
   //   const formdata = new FormData();
@@ -71,18 +80,18 @@ const Profile = () => {
   //   updateProfileImage();
   // }, [imageIsLoaded]);
 
-  const handleFeedState = (isPrivate) => {
-    switch (isPrivate) {
-      case true:
-        return <p>Users post are private</p>;
-      case false:
-        return posts?.map((p, i) => (
-          <Post key={i} post={p} posts={posts} setPosts={setPosts} />
-        ));
-      default:
-        return <p>You have no post!</p>;
-    }
-  };
+  // const handleFeedState = (isPrivate) => {
+  //   switch (isPrivate) {
+  //     case true:
+  //       return <p>Users post are private</p>;
+  //     case false:
+  //       return posts?.map((p, i) => (
+  //         <Post key={i} post={p} posts={posts} setPosts={setPosts} />
+  //       ));
+  //     default:
+  //       return <p>No posts!</p>;
+  //   }
+  // };
 
   return (
     <div className="  h-screen relative">
@@ -95,37 +104,27 @@ const Profile = () => {
           <div className=" relative">
             <img
               src={
-                user.coverPicture
-                  ? user.coverPicture
+                user?.coverPicture
+                  ? user?.coverPicture
                   : "/No-Image-Placeholder.svg.png"
               }
               alt=""
               className="w-full h-52 object-cover"
             />
             <img
-              src={user.profilePicture ? user.profilePicture : "/no-avatar.png"}
+              src={
+                user?.profilePicture ? user?.profilePicture : "/no-avatar.png"
+              }
               alt=""
               className="h-24 w-24 rounded-full object-cover absolute left-0 right-0 mx-auto top-[150px] border border-white"
             />
-            {/* <div className="absolute left-[48%] top-[220px] right-1/2 hover:cursor-pointer z-50 w-full">
-              <input
-                type="file"
-                className=" hover:cursor-pointer opacity-0 "
-                onChange={handleProfileImageChange}
-              />
-            </div>
-
-            <CameraAltIcon
-              font={25}
-              className="absolute left-0 right-0 mx-auto top-[230px] text-gray-400 hover:cursor-pointer"
-            /> */}
           </div>
           <div className="  mt-12  flex justify-center">
             <div className=" text-center">
               <p className=" font-bold">
-                {user.firstname} {user.lastname}
+                {user?.firstname} {user?.lastname}
               </p>
-              {user.id === id ? null : (
+              {user?.id === id ? null : (
                 <button className="p-1 w-24 text-white bg-sky-500 hover:bg-sky-600 mt-2">
                   + Follow
                 </button>
@@ -138,11 +137,16 @@ const Profile = () => {
           </div>
           <div className="flex">
             <div className="flex-1 lg:flex-[2] mt-10">
-              {handleFeedState(userProfile?.isPrivate)}
+              {/* {handleFeedState(userProfile?.isPrivate)} */}
+              {posts?.map((p, i) => {
+                return (
+                  <Post key={i} post={p} posts={posts} setPosts={setPosts} />
+                );
+              })}
             </div>
             <div className="hidden lg:block lg:flex-1 mt-10  ">
               <div className="flex mt-8 items-center justify-between">
-                <h2 className="text-lg">{user.firstname}s Friends</h2>
+                <h2 className="text-lg">{user?.firstname}s Friends</h2>
                 <p className=" text-sky-600 cursor-pointer">See More...</p>
               </div>
 

@@ -5,14 +5,39 @@ import GroupsIcon from "@mui/icons-material/Groups";
 import StoreMallDirectoryIcon from "@mui/icons-material/StoreMallDirectory";
 import { Link, useNavigate } from "react-router-dom";
 import LogoutIcon from "@mui/icons-material/Logout";
+import UserCard from "../userCard/UserCard";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 
 const Leftbar = () => {
   const navigate = useNavigate();
+  const currentUser = useSelector((state) => state.user);
+  const [users, setUsers] = useState();
 
   const logout = () => {
     localStorage.removeItem("token");
     navigate("/login");
   };
+
+  useEffect(() => {
+    const getUsers = async () => {
+      await axios
+        .get("http://localhost:5000/api/users")
+        .then((res) => {
+          setUsers(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+
+    getUsers();
+  }, []);
+
+  useEffect(() => {
+    setUsers(users?.filter((u) => u._id !== currentUser.id));
+  }, [users]);
 
   return (
     <>
@@ -50,58 +75,13 @@ const Leftbar = () => {
           </div>
 
           <div className=" overflow-y-scroll h-72">
-            <div className="flex mt-8">
-              <img
-                src="/me.jpg"
-                height="55px"
-                width="55px"
-                className=" rounded-full object-cover cursor-pointer"
-                alt=""
-              />
-              <div className="flex flex-col ml-2 text-sm cursor-pointer">
-                <p className=" font-bold">Dalton Barnett</p>
-                <p className=" mt-0 text-gray-500">@daltonbarnett21</p>
-              </div>
-            </div>
-            <div className="flex mt-8">
-              <img
-                src="/me.jpg"
-                height="55px"
-                width="55px"
-                className=" rounded-full object-cover cursor-pointer"
-                alt=""
-              />
-              <div className="flex flex-col ml-2 text-sm cursor-pointer">
-                <p className=" font-bold">Dalton Barnett</p>
-                <p className=" mt-0 text-gray-500">@daltonbarnett21</p>
-              </div>
-            </div>
-            <div className="flex mt-8">
-              <img
-                src="/me.jpg"
-                height="55px"
-                width="55px"
-                className=" rounded-full object-cover cursor-pointer"
-                alt=""
-              />
-              <div className="flex flex-col ml-2 text-sm cursor-pointer">
-                <p className=" font-bold">Dalton Barnett</p>
-                <p className=" mt-0 text-gray-500">@daltonbarnett21</p>
-              </div>
-            </div>
-            <div className="flex mt-8">
-              <img
-                src="/me.jpg"
-                height="55px"
-                width="55px"
-                className=" rounded-full object-cover cursor-pointer"
-                alt=""
-              />
-              <div className="flex flex-col ml-2 text-sm cursor-pointer">
-                <p className=" font-bold">Dalton Barnett</p>
-                <p className=" mt-0 text-gray-500">@daltonbarnett21</p>
-              </div>
-            </div>
+            {users?.map((u, i) => {
+              return (
+                <Link to={`/user/${u._id}`}>
+                  <UserCard user={u} key={i} />
+                </Link>
+              );
+            })}
           </div>
         </div>
       </div>

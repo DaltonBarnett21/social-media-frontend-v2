@@ -5,12 +5,10 @@ import Register from "./components/register/Register";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ProtectedRoute from "./protectedRoute/ProtectedRoute";
 import AppContainer from "./components/appContainer/AppContainer";
-import SetupProfile from "./components/setupProfile/SetupProfile";
 
 function App() {
   return (
     <>
-      {/* <SetupProfile /> */}
       <AppContainer>
         <BrowserRouter>
           <Routes>
@@ -22,7 +20,8 @@ function App() {
                 </ProtectedRoute>
               }
             />
-            <Route path="/user/:id" element={<Profile />} />
+            <Route path="/user/:id" element={<Profile otherUser={true} />} />
+            <Route path="/profile/:id" element={<Profile />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
           </Routes>

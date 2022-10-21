@@ -3,7 +3,7 @@ import { useState, useRef } from "react";
 import { useDispatch } from "react-redux";
 import { update } from "../../redux/userSlice";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 const Login = () => {
   const emailRef = useRef(null);
@@ -68,7 +68,11 @@ const Login = () => {
         </button>
         <span className="text-center mt-8">
           Don't have an account?{" "}
-          <span className=" text-blue-500 hover:cursor-pointer">Sign Up.</span>
+          <Link to="/register">
+            <span className=" text-blue-500 hover:cursor-pointer">
+              Sign Up.
+            </span>
+          </Link>
         </span>
       </form>
     </div>

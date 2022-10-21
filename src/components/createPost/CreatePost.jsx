@@ -101,10 +101,12 @@ const CreatePost = () => {
             className=" rounded-full max-w-full h-full  object-cover cursor-pointer"
             alt=""
           />
-          <div className="flex flex-col ml-2 text-sm cursor-pointer">
-            <p className=" font-bold">
-              {user.firstname} {user.lastname}
-            </p>
+          <div className="flex flex-col ml-2 text-sm cursor-pointer w-full">
+            <div className="flex">
+              <p className=" font-bold mr-1">{user.firstname}</p>{" "}
+              <p className=" font-bold">{user.lastname}</p>
+            </div>
+
             <p className=" mt-0 text-gray-500">@{user.username}</p>
           </div>
         </div>
