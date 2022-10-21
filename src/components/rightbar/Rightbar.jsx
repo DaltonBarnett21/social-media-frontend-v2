@@ -1,6 +1,26 @@
 import React from "react";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { useParams } from "react-router-dom";
 
 const Rightbar = () => {
+  const [followers, setFollowers] = useState();
+  let { id } = useParams();
+
+  useEffect(() => {
+    const getFollowers = async () => {
+      await axios
+        .get(`http://localhost:5000/api/users/${id}?showFollowers=true`)
+        .then((res) => {
+          setFollowers(res?.data?.followers);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+    getFollowers();
+  }, []);
+
   return (
     <div>
       <div className="p-5 sticky top-0">

@@ -14,6 +14,7 @@ const Leftbar = () => {
   const navigate = useNavigate();
   const currentUser = useSelector((state) => state.user);
   const [users, setUsers] = useState();
+  const [usersFilter, setUsersFilter] = useState();
 
   const logout = () => {
     localStorage.removeItem("token");
@@ -36,7 +37,7 @@ const Leftbar = () => {
   }, []);
 
   useEffect(() => {
-    setUsers(users?.filter((u) => u._id !== currentUser.id));
+    setUsersFilter(users?.filter((u) => u._id !== currentUser.id));
   }, [users]);
 
   return (
@@ -50,8 +51,10 @@ const Leftbar = () => {
             </Link>
           </div>
           <div className="mt-8 cursor-pointer flex items-center">
-            <GroupIcon className=" text-sky-500 mr-2" />
-            <span className=" text-gray-500">Friends</span>
+            <Link to="/friends">
+              <GroupIcon className=" text-sky-500 mr-2" />
+              <span className=" text-gray-500">Friends</span>
+            </Link>
           </div>
           <div className="mt-8 cursor-pointer flex items-center">
             <GroupsIcon className=" text-sky-500 mr-2" />
@@ -75,7 +78,7 @@ const Leftbar = () => {
           </div>
 
           <div className=" overflow-y-scroll h-72">
-            {users?.map((u, i) => {
+            {usersFilter?.map((u, i) => {
               return (
                 <Link to={`/user/${u._id}`}>
                   <UserCard user={u} key={i} />

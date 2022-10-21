@@ -5,6 +5,7 @@ import Register from "./components/register/Register";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ProtectedRoute from "./protectedRoute/ProtectedRoute";
 import AppContainer from "./components/appContainer/AppContainer";
+import Friends from "./pages/friends/Friends";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
             <Route path="/profile/:id" element={<Profile />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/friends" element={<Friends />} />
           </Routes>
         </BrowserRouter>
       </AppContainer>

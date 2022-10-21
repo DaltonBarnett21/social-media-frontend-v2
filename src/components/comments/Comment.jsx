@@ -4,6 +4,7 @@ import axios from "axios";
 import { format } from "timeago.js";
 import ShowMore from "../utilities/ShowMore";
 import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 
 const Comment = ({ commentData, comments, setComments, commentId, postId }) => {
   const [user, setUser] = useState();
@@ -37,12 +38,14 @@ const Comment = ({ commentData, comments, setComments, commentId, postId }) => {
 
   return (
     <div className="mt-3 flex items-center ">
-      <div className="h-12 w-12 ">
-        <img
-          src={profilePicture ? profilePicture : "/no-avatar.png"}
-          className=" rounded-full object-cover cursor-pointer ml-1 max-w-full h-full"
-          alt=""
-        />
+      <div className="h-12 w-14 ">
+        <Link to={`/user/${commentData.userId}`}>
+          <img
+            src={profilePicture ? profilePicture : "/no-avatar.png"}
+            className=" rounded-full object-cover cursor-pointer ml-1 max-w-full h-full"
+            alt=""
+          />
+        </Link>
       </div>
       <div className="ml-2 flex justify-between items-center rounded-md p-2 bg-gray-200 w-full relative">
         <div>

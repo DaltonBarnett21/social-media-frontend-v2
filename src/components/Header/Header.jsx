@@ -58,7 +58,7 @@ const Header = () => {
           </div>
 
           <div className="flex items-center ">
-            <Link to={`/profile/${user.id}`}>
+            <Link to={`/user/${user.id}`}>
               <div className="flex items-center ">
                 <div className="flex h-8 w-8 mr-2">
                   <img
@@ -82,7 +82,7 @@ const Header = () => {
                 <ArrowDropDownIcon />
               </MenuHandler>
               <MenuList className="z-50 outline-none">
-                <Link to={`/profile/${user.id}`}>
+                <Link to={`/user/${user.id}`}>
                   <div className="flex   p-2">
                     <Person2Icon className="mr-2" />
                     <p className="mb-1 hover:text-gray-500">Profile</p>

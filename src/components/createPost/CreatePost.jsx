@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { update } from "../../redux/postSlice";
 import { toast, ToastContainer } from "react-toastify";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
+import { Link } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
 
 const CreatePost = () => {
@@ -95,21 +96,24 @@ const CreatePost = () => {
         hideProgressBar={true}
       />
       <form onSubmit={handleSubmit} className=" ">
-        <div className="flex p-3 h-16 w-16 ">
-          <img
-            src={user.profilePicture ? user.profilePicture : "/no-avatar.png"}
-            className=" rounded-full max-w-full h-full  object-cover cursor-pointer"
-            alt=""
-          />
-          <div className="flex flex-col ml-2 text-sm cursor-pointer w-full">
-            <div className="flex">
-              <p className=" font-bold mr-1">{user.firstname}</p>{" "}
-              <p className=" font-bold">{user.lastname}</p>
-            </div>
+        <Link to={`/user/${user.id}`}>
+          <div className="flex p-3 h-16 w-16 ">
+            <img
+              src={user.profilePicture ? user.profilePicture : "/no-avatar.png"}
+              className=" rounded-full max-w-full h-full  object-cover cursor-pointer"
+              alt=""
+            />
+            <div className="flex flex-col ml-2 text-sm cursor-pointer w-full">
+              <div className="flex">
+                <p className=" font-bold mr-1">{user.firstname}</p>{" "}
+                <p className=" font-bold">{user.lastname}</p>
+              </div>
 
-            <p className=" mt-0 text-gray-500">@{user.username}</p>
+              <p className=" mt-0 text-gray-500">@{user.username}</p>
+            </div>
           </div>
-        </div>
+        </Link>
+
         <input
           placeholder={`What's on your mind, ${user.firstname}?`}
           autoComplete="off"

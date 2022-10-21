@@ -3,19 +3,24 @@ import Header from "../../components/Header/Header";
 import Leftbar from "../../components/leftbar/Leftbar";
 import NavMenu from "../../components/mobile/NavMenu";
 import Post from "../../components/post/Post";
-import { useParams, useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
 import axios from "axios";
 import { useEffect } from "react";
-import CameraAltIcon from "@mui/icons-material/CameraAlt";
+import { useSelector } from "react-redux";
+import AddIcon from "@mui/icons-material/Add";
+import CheckIcon from "@mui/icons-material/Check";
+import UserCard from "../../components/userCard/UserCard";
 
 const Profile = () => {
   const [user, setUser] = useState();
+  const [isFollowing, setIsFollowing] = useState(false);
+  const [followers, setFollowers] = useState();
   const [userProfile, setUserProfile] = useState();
   const [posts, setPosts] = useState();
-  const navigate = useNavigate();
+  const signedInUser = useSelector((state) => state.user);
   let { id } = useParams();
 
+  //get profile information, if any
   useEffect(() => {
     const getProfile = async () => {
       await axios
@@ -30,6 +35,22 @@ const Profile = () => {
     getProfile();
   }, [id]);
 
+  //get followers
+  useEffect(() => {
+    const getFollowers = async () => {
+      await axios
+        .get(`http://localhost:5000/api/users/${id}?showFollowers=true`)
+        .then((res) => {
+          setFollowers(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+    getFollowers();
+  }, [id]);
+
+  //get user
   useEffect(() => {
     const getUser = async () => {
       await axios
@@ -44,10 +65,11 @@ const Profile = () => {
     getUser();
   }, [id]);
 
+  //get only users post since it's their profile
   useEffect(() => {
     const getUserPosts = async () => {
       await axios
-        .get(`http://localhost:5000/api/posts/timeline/${id}`)
+        .get(`http://localhost:5000/api/posts/timeline/${id}?profilePosts=true`)
         .then((res) => {
           setPosts(res.data);
         })
@@ -59,39 +81,25 @@ const Profile = () => {
     getUserPosts();
   }, [id]);
 
-  // useEffect(() => {
-  //   const formdata = new FormData();
-  //   formdata.append("image", newProfileImage);
-  //   const updateProfileImage = async () => {
-  //     await axios
-  //       .put(
-  //         `http://localhost:5000/api/images/${user.id}/profile-image`,
-  //         formdata,
-  //         {
-  //           headers: { "Content-Type": "multipart/form-data" },
-  //           withCredentials: true,
-  //           contentType: "application/json",
-  //         }
-  //       )
-  //       .then((res) => {
-  //         navigate(0);
-  //       });
-  //   };
-  //   updateProfileImage();
-  // }, [imageIsLoaded]);
+  useEffect(() => {
+    if (user?.followers.includes(signedInUser.id)) {
+      setIsFollowing(true);
+    }
+  }, [user]);
 
-  // const handleFeedState = (isPrivate) => {
-  //   switch (isPrivate) {
-  //     case true:
-  //       return <p>Users post are private</p>;
-  //     case false:
-  //       return posts?.map((p, i) => (
-  //         <Post key={i} post={p} posts={posts} setPosts={setPosts} />
-  //       ));
-  //     default:
-  //       return <p>No posts!</p>;
-  //   }
-  // };
+  const follow = async () => {
+    setIsFollowing(true);
+    await axios.put(`http://localhost:5000/api/users/${id}/follow`, {
+      userId: signedInUser.id,
+    });
+  };
+
+  const unfollow = async () => {
+    setIsFollowing(false);
+    await axios.put(`http://localhost:5000/api/users/${id}/unfollow`, {
+      userId: signedInUser.id,
+    });
+  };
 
   return (
     <div className="  h-screen relative">
@@ -124,9 +132,26 @@ const Profile = () => {
               <p className=" font-bold">
                 {user?.firstname} {user?.lastname}
               </p>
-              {user?.id === id ? null : (
-                <button className="p-1 w-24 text-white bg-sky-500 hover:bg-sky-600 mt-2">
-                  + Follow
+
+              {id === signedInUser.id ? null : isFollowing ? (
+                <button
+                  onClick={unfollow}
+                  className="p-1 w-24 text-white bg-sky-500 hover:bg-sky-600 mt-2"
+                >
+                  <div className="flex items-center w-full justify-center">
+                    <CheckIcon fontSize="12px" className="mr-1" />
+                    <span>Following</span>
+                  </div>
+                </button>
+              ) : (
+                <button
+                  onClick={follow}
+                  className="p-1 w-24 text-white bg-sky-500 hover:bg-sky-600 mt-2"
+                >
+                  <div className="flex items-center w-full justify-center">
+                    <AddIcon fontSize="12px" className="mr-1" />
+                    <span>Follow</span>
+                  </div>
                 </button>
               )}
 
@@ -137,7 +162,6 @@ const Profile = () => {
           </div>
           <div className="flex">
             <div className="flex-1 lg:flex-[2] mt-10">
-              {/* {handleFeedState(userProfile?.isPrivate)} */}
               {posts?.map((p, i) => {
                 return (
                   <Post key={i} post={p} posts={posts} setPosts={setPosts} />
@@ -150,85 +174,10 @@ const Profile = () => {
                 <p className=" text-sky-600 cursor-pointer">See More...</p>
               </div>
 
-              <div className="grid sm:grid-cols-2 lg:grid-cols-2 gap-9 mt-5 p-4 w-80 ">
-                <div className="flex ">
-                  <img
-                    src="/me.jpg"
-                    height="55px"
-                    width="55px"
-                    className=" rounded-full object-cover cursor-pointer"
-                    alt=""
-                  />
-                  <div className="flex flex-col ml-2 text-sm cursor-pointer">
-                    <p className=" font-bold">Dalton Barnett</p>
-                    <p className=" mt-0 text-gray-500">@daltonbarnett21</p>
-                  </div>
-                </div>
-                <div className="flex ">
-                  <img
-                    src="/me.jpg"
-                    height="55px"
-                    width="55px"
-                    className=" rounded-full object-cover cursor-pointer"
-                    alt=""
-                  />
-                  <div className="flex flex-col ml-2 text-sm cursor-pointer">
-                    <p className=" font-bold">Dalton Barnett</p>
-                    <p className=" mt-0 text-gray-500">@daltonbarnett21</p>
-                  </div>
-                </div>
-                <div className="flex ">
-                  <img
-                    src="/me.jpg"
-                    height="55px"
-                    width="55px"
-                    className=" rounded-full object-cover cursor-pointer"
-                    alt=""
-                  />
-                  <div className="flex flex-col ml-2 text-sm cursor-pointer">
-                    <p className=" font-bold">Dalton Barnett</p>
-                    <p className=" mt-0 text-gray-500">@daltonbarnett21</p>
-                  </div>
-                </div>
-                <div className="flex ">
-                  <img
-                    src="/me.jpg"
-                    height="55px"
-                    width="55px"
-                    className=" rounded-full object-cover cursor-pointer"
-                    alt=""
-                  />
-                  <div className="flex flex-col ml-2 text-sm cursor-pointer">
-                    <p className=" font-bold">Dalton Barnett</p>
-                    <p className=" mt-0 text-gray-500">@daltonbarnett21</p>
-                  </div>
-                </div>
-                <div className="flex ">
-                  <img
-                    src="/me.jpg"
-                    height="55px"
-                    width="55px"
-                    className=" rounded-full object-cover cursor-pointer"
-                    alt=""
-                  />
-                  <div className="flex flex-col ml-2 text-sm cursor-pointer">
-                    <p className=" font-bold">Dalton Barnett</p>
-                    <p className=" mt-0 text-gray-500">@daltonbarnett21</p>
-                  </div>
-                </div>
-                <div className="flex ">
-                  <img
-                    src="/me.jpg"
-                    height="55px"
-                    width="55px"
-                    className=" rounded-full object-cover cursor-pointer"
-                    alt=""
-                  />
-                  <div className="flex flex-col ml-2 text-sm cursor-pointer">
-                    <p className=" font-bold">Dalton Barnett</p>
-                    <p className=" mt-0 text-gray-500">@daltonbarnett21</p>
-                  </div>
-                </div>
+              <div className="grid sm:grid-cols-2 lg:grid-cols-2 gap-9  w-80 ">
+                {followers?.map((follower, i) => {
+                  return <UserCard key={i} user={follower} />;
+                })}
               </div>
             </div>
           </div>

@@ -12,15 +12,17 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ShowMore from "../utilities/ShowMore";
 import { useSelector } from "react-redux";
+import { Link, useParams } from "react-router-dom";
 
 const Post = ({ post, posts, setPosts }) => {
   const [user, setUser] = useState({});
-  const userProfilePicture = useSelector((state) => state.user.profilePicture);
+  const signedInUser = useSelector((state) => state.user);
   const [like, setLike] = useState(post.likes.length);
   const [showModal, setShowModel] = useState(false);
   const [hasLiked, setHasLiked] = useState(false);
   const [comments, setComments] = useState();
   const [hasCommented, setHasCommented] = useState(false);
+  let { id } = useParams();
 
   const notify = () => {
     toast.success("Deleted Post!", {
@@ -30,25 +32,32 @@ const Post = ({ post, posts, setPosts }) => {
 
   //get user profile info move to redux later
   useEffect(() => {
-    const fetchPosts = async () => {
+    const getUser = async () => {
       const res = await axios.get(
         `http://localhost:5000/api/users/${post.userId}`
       );
       setUser(res.data);
     };
-    fetchPosts();
-  }, []);
+    getUser();
+  }, [posts]);
 
   //get comments
   useEffect(() => {
-    const fetchPosts = async () => {
+    const getComments = async () => {
       const res = await axios.get(
         `http://localhost:5000/api/comments/${post._id}`
       );
       setComments(res.data);
     };
-    fetchPosts();
+    getComments();
   }, [hasCommented]);
+
+  //check to if i've liked before
+  useEffect(() => {
+    if (post.likes.includes(post.userId)) {
+      setHasLiked(true);
+    }
+  }, [post]);
 
   //handleLikes
   const handleLikes = async () => {
@@ -78,22 +87,26 @@ const Post = ({ post, posts, setPosts }) => {
     <div className="bg-white m-5 shadow-md rounded-lg p-2 relative  ">
       <ToastContainer autoClose={1000} />
       <div className="  flex justify-between items-center relative p-2">
-        <div className="flex items-center">
-          <div className="flex h-12  w-12">
-            <img
-              src={userProfilePicture ? userProfilePicture : "/no-avatar.png"}
-              className=" rounded-full max-w-full h-full object-cover cursor-pointer"
-              alt=""
-            />
-          </div>
+        <Link to={`/user/${post.userId}`}>
+          <div className="flex items-center">
+            <div className="flex h-12  w-12">
+              <img
+                src={
+                  user.profilePicture ? user.profilePicture : "/no-avatar.png"
+                }
+                className=" rounded-full max-w-full h-full object-cover cursor-pointer"
+                alt=""
+              />
+            </div>
 
-          <div className="flex flex-col ml-2 text-sm cursor-pointer">
-            <p className=" font-bold">
-              {user.firstname} {user.lastname}
-            </p>
-            <p className="text-sm text-gray-500">{format(post.createdAt)}</p>
+            <div className="flex flex-col ml-2 text-sm cursor-pointer">
+              <p className=" font-bold">
+                {user.firstname} {user.lastname}
+              </p>
+              <p className="text-sm text-gray-500">{format(post.createdAt)}</p>
+            </div>
           </div>
-        </div>
+        </Link>
 
         {/* show more here */}
         <ShowMore actionText="Delete Post" />
@@ -139,6 +152,7 @@ const Post = ({ post, posts, setPosts }) => {
 
       <CreateComment
         post={post}
+        user={user}
         hasCommented={hasCommented}
         setHasCommented={setHasCommented}
         setShowModel={setShowModel}

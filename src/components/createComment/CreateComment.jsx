@@ -9,11 +9,12 @@ const CreateComment = ({
   hasCommented,
   setHasCommented,
   setShowModel,
+  user,
 }) => {
   const inputRef = useRef();
   const [isDisabled, setIsDisabled] = useState(true);
   const profilePicture = localStorage.getItem("profilePicture");
-  const user = useSelector((state) => state.user);
+
   const [comment, setComment] = useState({
     userId: "6346e10d6d1c8f98968f1b14",
     comment: "",
