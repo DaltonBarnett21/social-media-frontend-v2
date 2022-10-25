@@ -8,6 +8,7 @@ import AppContainer from "./components/appContainer/AppContainer";
 import Friends from "./pages/friends/Friends";
 import Settings from "./pages/settings/Settings";
 import Recommended from "./pages/recommended/Recommended";
+import Notifications from "./pages/notifications/Notifications";
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
             <Route path="/friends" element={<Friends />} />
             <Route path="/settings" element={<Settings />} />
             <Route path="/recommended" element={<Recommended />} />
+            <Route path="/notifications" element={<Notifications />} />
           </Routes>
         </BrowserRouter>
       </AppContainer>

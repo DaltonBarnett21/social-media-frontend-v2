@@ -70,7 +70,25 @@ const Post = ({ post, posts, setPosts }) => {
       { withCredentials: true, contentType: "application/json" }
     );
     setHasLiked(!hasLiked);
+    await axios.post(
+      `http://localhost:5000/api/notifications/${signedInUser.id}`,
+      {
+        fromUserId: signedInUser.id,
+        userIdToNotify: post.userId,
+        postId: post._id,
+        action: `${signedInUser.firstname} ${signedInUser.lastname} liked your post.`,
+      }
+    );
   };
+
+  // useEffect(() => {
+  //   const likeNotification = async () => {
+  //     if (hasLiked === true) {
+
+  //     }
+  //   };
+  //   likeNotification();
+  // }, [hasLiked]);
 
   //handle delete post
   const deletePost = async () => {

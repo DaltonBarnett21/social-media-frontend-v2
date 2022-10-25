@@ -46,7 +46,19 @@ const CreateComment = ({
     }
     setIsDisabled(true);
     inputRef.current.value = "";
+
+    try {
+      await axios.post("http://localhost:5000/api/notifications", {
+        fromUserId: currentUser.id,
+        userIdToNotify: post.userId,
+        postId: post._id,
+        action: `${currentUser.firstname} ${currentUser.lastname} commented on your post.`,
+      });
+    } catch (err) {
+      console.log(err);
+    }
   };
+
   return (
     <form
       onSubmit={handleSubmit}

@@ -18,6 +18,7 @@ const Header = () => {
   const user = useSelector((state) => state.user);
   const [isOpen, setIsOpen] = useState(false);
   const [profileImage, setProfileImage] = useState();
+  const [notifications, setNotifications] = useState();
   const navigate = useNavigate();
 
   const logout = () => {
@@ -32,6 +33,22 @@ const Header = () => {
     };
     getUser();
   }, []);
+
+  useEffect(() => {
+    const getNotifications = async () => {
+      const res = await axios.get(
+        `http://localhost:5000/api/notifications/${user.id}?showNotSeen=true`
+      );
+      setNotifications(res.data);
+    };
+    getNotifications();
+  }, []);
+
+  const handleUpdateNotification = async () => {
+    await axios.put(`http://localhost:5000/api/notifications/${user.id}`, {
+      hasSeen: true,
+    });
+  };
 
   return (
     <div className="sticky top-0 bg-white border border-b-gray-300  z-50">
@@ -70,12 +87,19 @@ const Header = () => {
               1
             </span>
           </div>
-          <div className="relative cursor-pointer">
-            <NotificationsIcon className=" text-gray-600  mr-3 " />
-            <span className="bg-red-500 text-white text-xs w-4 h-4 flex justify-center items-center rounded-full absolute top-0 left-3">
-              10
-            </span>
-          </div>
+          <Link to="/notifications">
+            <div
+              className="relative cursor-pointer"
+              onClick={handleUpdateNotification}
+            >
+              <NotificationsIcon className=" text-gray-600  mr-3 " />
+              {notifications?.length !== 0 && (
+                <span className="bg-red-500 text-white text-xs w-4 h-4 flex justify-center items-center rounded-full absolute top-0 left-3">
+                  {notifications?.length}
+                </span>
+              )}
+            </div>
+          </Link>
 
           <div className="flex items-center ">
             <Link to={`/user/${user.id}`}>
