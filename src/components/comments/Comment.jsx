@@ -9,12 +9,14 @@ import { Link } from "react-router-dom";
 const Comment = ({ commentData, comments, setComments, commentId, postId }) => {
   const [user, setUser] = useState();
   const profilePicture = useSelector((state) => state.user.profilePicture);
+  const signedInUser = useSelector((state) => state.user);
 
   useEffect(() => {
     const fetchPosts = async () => {
       const res = await axios.get(
         `http://localhost:5000/api/users/${commentData.userId}`
       );
+
       setUser(res.data);
     };
     fetchPosts();
@@ -38,15 +40,16 @@ const Comment = ({ commentData, comments, setComments, commentId, postId }) => {
 
   return (
     <div className="mt-3 flex items-center ">
-      <div className="h-12 w-14 ">
-        <Link to={`/user/${commentData.userId}`}>
+      <Link to={`/user/${commentData.userId}`}>
+        <div className="h-12 w-12">
           <img
-            src={profilePicture ? profilePicture : "/no-avatar.png"}
-            className=" rounded-full object-cover cursor-pointer ml-1 max-w-full h-full"
+            src={user?.profilePicture ? user?.profilePicture : "/no-avatar.png"}
+            className=" rounded-full object-cover cursor-pointer ml-1 w-full h-full"
             alt=""
           />
-        </Link>
-      </div>
+        </div>
+      </Link>
+
       <div className="ml-2 flex justify-between items-center rounded-md p-2 bg-gray-200 w-full relative">
         <div>
           <div className="flex">

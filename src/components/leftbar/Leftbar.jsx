@@ -14,6 +14,7 @@ const Leftbar = () => {
   const navigate = useNavigate();
   const currentUser = useSelector((state) => state.user);
   const [users, setUsers] = useState();
+
   const [usersFilter, setUsersFilter] = useState();
 
   const logout = () => {
@@ -46,39 +47,41 @@ const Leftbar = () => {
         <div className="p-5 text-lg ">
           <div className="mt-8 cursor-pointer flex items-center">
             <Link to="/">
-              <HomeIcon className=" text-sky-500 mr-2" />
+              <HomeIcon className=" text-blue-400 mr-2" />
               <span className=" text-gray-500">Home</span>
             </Link>
           </div>
           <div className="mt-8 cursor-pointer flex items-center">
             <Link to="/friends">
-              <GroupIcon className=" text-sky-500 mr-2" />
-              <span className=" text-gray-500">Friends</span>
+              <GroupIcon className=" text-blue-400 mr-2" />
+              <span className=" text-gray-500">Following</span>
             </Link>
           </div>
           <div className="mt-8 cursor-pointer flex items-center">
-            <GroupsIcon className=" text-sky-500 mr-2" />
+            <GroupsIcon className=" text-blue-400 mr-2" />
             <span className=" text-gray-500">Groups</span>
           </div>
           <div className="mt-8 cursor-pointer flex items-center">
-            <StoreMallDirectoryIcon className=" text-sky-500 mr-2" />
+            <StoreMallDirectoryIcon className=" text-blue-400 mr-2" />
             <span className=" text-gray-500">Market Place</span>
           </div>
           <div
             className="mt-8 cursor-pointer flex items-center"
             onClick={logout}
           >
-            <LogoutIcon className=" text-sky-500 mr-2" />
+            <LogoutIcon className=" text-blue-400 mr-2" />
             <span className=" text-gray-500">Logout</span>
           </div>
           <hr className="mt-8" />
           <div className="flex justify-between">
             <h2 className="text-xl mt-8">People to Follow</h2>
-            <p className="mt-8 text-sky-600 cursor-pointer">See More...</p>
+            <Link to="/recommended">
+              <p className="mt-8 text-blue-400 cursor-pointer">See More...</p>
+            </Link>
           </div>
 
           <div className=" overflow-y-scroll h-72">
-            {usersFilter?.map((u, i) => {
+            {usersFilter?.slice(0, 5).map((u, i) => {
               return (
                 <Link to={`/user/${u._id}`}>
                   <UserCard user={u} key={i} />

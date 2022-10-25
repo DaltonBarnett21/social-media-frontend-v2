@@ -5,15 +5,19 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Person2Icon from "@mui/icons-material/Person2";
 import SettingsIcon from "@mui/icons-material/Settings";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { Menu, MenuHandler, MenuList } from "@material-tailwind/react";
+import MenuIcon from "@mui/icons-material/Menu";
+import axios from "axios";
+import MobileMenu from "../mobleMenu/MobileMenu";
 
 const Header = () => {
   const user = useSelector((state) => state.user);
   const [isOpen, setIsOpen] = useState(false);
+  const [profileImage, setProfileImage] = useState();
   const navigate = useNavigate();
 
   const logout = () => {
@@ -21,9 +25,17 @@ const Header = () => {
     navigate("/login");
   };
 
+  useEffect(() => {
+    const getUser = async () => {
+      const res = await axios.get(`http://localhost:5000/api/users/${user.id}`);
+      setProfileImage(res.data.profilePicture);
+    };
+    getUser();
+  }, []);
+
   return (
     <div className="sticky top-0 bg-white border border-b-gray-300  z-50">
-      <div className="flex justify-between  p-5">
+      <div className="flex justify-between relative  p-5">
         <Link to="/">
           <img
             src="/logo-no-background.png"
@@ -35,13 +47,21 @@ const Header = () => {
         </Link>
 
         <div className=" shadow-md p-1 bg-white  flex ">
-          <SearchIcon className=" text-gray-400 mr-2 " />
+          <SearchIcon className=" text-gray-400 mr-3 " />
           <input
             type="text"
+            autoComplete="new-password"
             placeholder="Search..."
             className=" outline-none font-extralight text-gray-500 lg:w-[500px] "
           />
         </div>
+
+        <MenuIcon
+          className="flex lg:invisible cursor-pointer"
+          onClick={() => setIsOpen(!isOpen)}
+        />
+
+        {isOpen && <MobileMenu />}
 
         <div className=" hidden lg:flex items-center cursor-pointer relative">
           <div className="relative">
@@ -62,12 +82,8 @@ const Header = () => {
               <div className="flex items-center ">
                 <div className="flex h-8 w-8 mr-2">
                   <img
-                    src={
-                      user.profilePicture
-                        ? user.profilePicture
-                        : "/no-avatar.png"
-                    }
-                    className=" rounded-full max-w-full h-full object-cover cursor-pointer "
+                    src={profileImage ? profileImage : "/no-avatar.png"}
+                    className=" rounded-full w-full h-full object-cover cursor-pointer "
                     alt=""
                   />
                 </div>
@@ -88,11 +104,12 @@ const Header = () => {
                     <p className="mb-1 hover:text-gray-500">Profile</p>
                   </div>
                 </Link>
-
-                <div className="flex  p-2">
-                  <SettingsIcon className="mr-2" />
-                  <p className="mb-1 hover:text-gray-500">Settings</p>
-                </div>
+                <Link to="/settings">
+                  <div className="flex  p-2">
+                    <SettingsIcon className="mr-2" />
+                    <p className="mb-1 hover:text-gray-500">Settings</p>
+                  </div>
+                </Link>
 
                 <div
                   className="flex hover:cursor-pointer  p-2"

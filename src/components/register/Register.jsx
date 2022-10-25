@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Register = () => {
   const {
@@ -10,15 +11,18 @@ const Register = () => {
     handleSubmit,
     formState: { errors },
   } = useForm();
+  const navigate = useNavigate();
+
+  const [error, setError] = useState();
 
   const onSubmit = async (data) => {
     await axios
       .post("http://localhost:5000/api/auth/register", data)
       .then((res) => {
-        console.log(res.data);
+        navigate("/login");
       })
       .catch((err) => {
-        console.log(err);
+        setError(err);
       });
   };
 
@@ -58,6 +62,7 @@ const Register = () => {
         <input
           type="text"
           placeholder="Username"
+          autoComplete="new-password"
           className=" border border-gray-400 p-2 w-72 outline-none mt-3 text-gray-500"
           {...register("username", { required: true })}
         />
@@ -69,6 +74,7 @@ const Register = () => {
         <input
           type="text"
           placeholder="Email"
+          autoComplete="new-email"
           className=" border border-gray-400 p-2 w-72 outline-none mt-3 text-gray-500"
           {...register("email", { required: true })}
         />
@@ -80,6 +86,7 @@ const Register = () => {
         <input
           type="password"
           placeholder="Password"
+          autoComplete="new-password"
           className=" border border-gray-400 p-2 w-72 outline-none mt-3 text-gray-500"
           {...register("password", { required: true })}
         />

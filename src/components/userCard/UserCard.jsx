@@ -2,8 +2,8 @@ import React from "react";
 
 const UserCard = ({ user }) => {
   return (
-    <div className="flex mt-5 shadow-md border border-gray-200 bg-white p-2">
-      <div className=" h-12 w-12 flex items-center">
+    <div className="flex mt-5 flex-1 shadow-md border border-gray-200 bg-white p-2 hover:cursor-pointer hover:bg-gray-200 ">
+      <div className=" h-12 w-12 flex items-center ">
         <img
           src={user?.profilePicture ? user?.profilePicture : "/no-avatar.png"}
           className=" rounded-full object-cover cursor-pointer h-full w-full"

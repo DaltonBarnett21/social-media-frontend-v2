@@ -1,7 +1,7 @@
 import React from "react";
 import PhotoLibraryIcon from "@mui/icons-material/PhotoLibrary";
 import SendIcon from "@mui/icons-material/Send";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { update } from "../../redux/postSlice";
@@ -17,7 +17,16 @@ const CreatePost = () => {
   const [image, setImage] = useState();
   const [imageBoxIsOpen, setImageBoxIsOpen] = useState(false);
   const [isDisabled, setIsDisabled] = useState(true);
+  const [profileImage, setProfileImage] = useState();
   const user = useSelector((state) => state.user);
+
+  useEffect(() => {
+    const getUser = async () => {
+      const res = await axios.get(`http://localhost:5000/api/users/${user.id}`);
+      setProfileImage(res.data.profilePicture);
+    };
+    getUser();
+  }, []);
 
   const [post, setPost] = useState({
     desc: "",
@@ -97,12 +106,15 @@ const CreatePost = () => {
       />
       <form onSubmit={handleSubmit} className=" ">
         <Link to={`/user/${user.id}`}>
-          <div className="flex p-3 h-16 w-16 ">
-            <img
-              src={user.profilePicture ? user.profilePicture : "/no-avatar.png"}
-              className=" rounded-full max-w-full h-full  object-cover cursor-pointer"
-              alt=""
-            />
+          <div className="flex p-3  ">
+            <div className="h-12 w-12">
+              <img
+                src={profileImage ? profileImage : "/no-avatar.png"}
+                className=" rounded-full w-full h-full  object-cover cursor-pointer"
+                alt=""
+              />
+            </div>
+
             <div className="flex flex-col ml-2 text-sm cursor-pointer w-full">
               <div className="flex">
                 <p className=" font-bold mr-1">{user.firstname}</p>{" "}

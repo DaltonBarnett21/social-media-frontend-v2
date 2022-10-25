@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
 import { setError, setLoading, setSuccess } from "../../redux/loadingSlice";
+import UserCard from "../userCard/UserCard";
 
 const Feed = () => {
   const [posts, setPosts] = useState([]);
@@ -35,6 +36,22 @@ const Feed = () => {
     fetchPosts();
   }, [postState, user]);
 
+  const [users, setUsers] = useState();
+  useEffect(() => {
+    const getUsers = async () => {
+      await axios
+        .get("http://localhost:5000/api/users")
+        .then((res) => {
+          setUsers(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+
+    getUsers();
+  }, []);
+
   if (loadingState.isloading) {
     return (
       <div className="flex-1 lg:block lg:flex-[5] lg:p-1 relative ">
@@ -44,6 +61,12 @@ const Feed = () => {
   } else {
     return (
       <div className="flex-1 lg:block lg:flex-[5] lg:p-1 relative ">
+        {/* <div className="flex lg:hidden pl-4 pr-4">
+          {users?.slice(0, 5).map((u, i) => (
+            <UserCard user={u} key={i} />
+          ))}
+        </div> */}
+
         <CreatePost />
         {posts.map((p, i) => (
           <Post key={i} post={p} setPosts={setPosts} posts={posts} />

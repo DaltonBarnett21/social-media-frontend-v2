@@ -6,6 +6,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ProtectedRoute from "./protectedRoute/ProtectedRoute";
 import AppContainer from "./components/appContainer/AppContainer";
 import Friends from "./pages/friends/Friends";
+import Settings from "./pages/settings/Settings";
+import Recommended from "./pages/recommended/Recommended";
 
 function App() {
   return (
@@ -26,6 +28,8 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/friends" element={<Friends />} />
+            <Route path="/settings" element={<Settings />} />
+            <Route path="/recommended" element={<Recommended />} />
           </Routes>
         </BrowserRouter>
       </AppContainer>

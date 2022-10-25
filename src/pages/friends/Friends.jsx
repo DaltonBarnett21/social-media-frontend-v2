@@ -7,6 +7,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import UserCard from "../../components/userCard/UserCard";
+import { Link } from "react-router-dom";
 
 const Friends = () => {
   const [followers, setFollowers] = useState();
@@ -17,7 +18,7 @@ const Friends = () => {
     const getFollowers = async () => {
       await axios
         .get(
-          `http://localhost:5000/api/users/6351ed32c276993655c63090?showFollowers=true`
+          `http://localhost:5000/api/users/${currentUser.id}?showFollowers=true`
         )
         .then((res) => {
           setFollowers(res.data);
@@ -36,10 +37,17 @@ const Friends = () => {
         <div className="hidden lg:block lg:flex-[2] bg-white relative">
           <Leftbar />
         </div>
-        <div className="flex-1 lg:block lg:flex-[5] lg:p-1 relative">
+        <div className="flex-1 lg:block lg:flex-[5] lg:p-1 relative h-screen">
           {followers?.map((user, i) => (
-            <UserCard user={user} key={i} />
+            <Link to={`/user/${user._id}`}>
+              <UserCard user={user} key={i} />
+            </Link>
           ))}
+          {followers?.length === 0 && (
+            <div className="flex justify-center">
+              <span>You're not following anyone!</span>
+            </div>
+          )}
         </div>
         <div className="hidden lg:block lg:flex-[2] bg-white relative">
           <Rightbar />

@@ -43,9 +43,7 @@ const Profile = () => {
         .then((res) => {
           setFollowers(res.data);
         })
-        .catch((err) => {
-          console.log(err);
-        });
+        .catch((err) => {});
     };
     getFollowers();
   }, [id]);
@@ -84,8 +82,10 @@ const Profile = () => {
   useEffect(() => {
     if (user?.followers.includes(signedInUser.id)) {
       setIsFollowing(true);
+    } else {
+      setIsFollowing(false);
     }
-  }, [user]);
+  }, [user, signedInUser]);
 
   const follow = async () => {
     setIsFollowing(true);
@@ -167,17 +167,23 @@ const Profile = () => {
                   <Post key={i} post={p} posts={posts} setPosts={setPosts} />
                 );
               })}
+
+              {posts?.length === 0 && <span>No Posts yet!</span>}
             </div>
             <div className="hidden lg:block lg:flex-1 mt-10  ">
               <div className="flex mt-8 items-center justify-between">
-                <h2 className="text-lg">{user?.firstname}s Friends</h2>
+                <h2 className="text-lg">{user?.firstname}s Followers</h2>
                 <p className=" text-sky-600 cursor-pointer">See More...</p>
               </div>
 
-              <div className="grid sm:grid-cols-2 lg:grid-cols-2 gap-9  w-80 ">
-                {followers?.map((follower, i) => {
-                  return <UserCard key={i} user={follower} />;
-                })}
+              <div className="grid sm:grid-cols-2 lg:grid-cols-2 gap-9  w-full ">
+                {followers?.map((follower, i) => (
+                  <UserCard key={i} user={follower} />
+                ))}
+
+                {followers?.length === 0 && (
+                  <span className="mt-5">No Followers yet!</span>
+                )}
               </div>
             </div>
           </div>

@@ -10,6 +10,7 @@ const Login = () => {
   const passwordRef = useRef(null);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [error, setError] = useState();
   const [loginState, setLoginState] = useState({
     email: "",
     password: "",
@@ -32,7 +33,7 @@ const Login = () => {
         navigate("/");
       })
       .catch((err) => {
-        console.log(err);
+        setError(err.response.data);
       });
   };
 
@@ -63,6 +64,10 @@ const Login = () => {
           className=" border border-gray-400 p-2 w-72 outline-none mb-5 text-gray-500"
           onChange={handleChange}
         />
+        <div className="flex justify-center">
+          <span className=" text-xl text-red-500">{error}</span>
+        </div>
+
         <button className=" bg-blue-500 w-2/3 mx-auto p-2 text-white hover:bg-blue-600 mt-6 ">
           Sign In
         </button>

@@ -13,10 +13,10 @@ const CreateComment = ({
 }) => {
   const inputRef = useRef();
   const [isDisabled, setIsDisabled] = useState(true);
-  const profilePicture = localStorage.getItem("profilePicture");
+  const currentUser = useSelector((state) => state.user);
 
   const [comment, setComment] = useState({
-    userId: "6346e10d6d1c8f98968f1b14",
+    userId: currentUser.id,
     comment: "",
   });
 
@@ -50,12 +50,16 @@ const CreateComment = ({
   return (
     <form
       onSubmit={handleSubmit}
-      className="p-2 flex absolute bottom-0 z-50 w-[98%] bg-white    items-center"
+      className="p-2 flex absolute bottom-0 z-40 w-[98%] bg-white    items-center"
     >
-      <div className="h-9 w-12">
+      <div className="h-8 w-8">
         <img
-          src={user.profilePicture ? user.profilePicture : "/no-avatar.png"}
-          className=" rounded-full object-cover cursor-pointer max-w-full h-full"
+          src={
+            currentUser.profilePicture
+              ? currentUser.profilePicture
+              : "/no-avatar.png"
+          }
+          className=" rounded-full object-cover cursor-pointer w-full h-full"
           alt=""
         />
       </div>

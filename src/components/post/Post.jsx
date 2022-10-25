@@ -30,7 +30,6 @@ const Post = ({ post, posts, setPosts }) => {
     });
   };
 
-  //get user profile info move to redux later
   useEffect(() => {
     const getUser = async () => {
       const res = await axios.get(
@@ -66,7 +65,7 @@ const Post = ({ post, posts, setPosts }) => {
     await axios.put(
       `http://localhost:5000/api/posts/${post._id}/like`,
       {
-        userId: post.userId,
+        userId: signedInUser.id,
       },
       { withCredentials: true, contentType: "application/json" }
     );
@@ -89,12 +88,12 @@ const Post = ({ post, posts, setPosts }) => {
       <div className="  flex justify-between items-center relative p-2">
         <Link to={`/user/${post.userId}`}>
           <div className="flex items-center">
-            <div className="flex h-12  w-12">
+            <div className="flex h-12  w-12 ">
               <img
                 src={
                   user.profilePicture ? user.profilePicture : "/no-avatar.png"
                 }
-                className=" rounded-full max-w-full h-full object-cover cursor-pointer"
+                className=" rounded-full w-full h-full object-cover cursor-pointer"
                 alt=""
               />
             </div>
