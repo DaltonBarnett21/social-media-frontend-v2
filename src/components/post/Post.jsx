@@ -22,6 +22,7 @@ const Post = ({ post, posts, setPosts }) => {
   const [hasLiked, setHasLiked] = useState(false);
   const [comments, setComments] = useState();
   const [hasCommented, setHasCommented] = useState(false);
+  const [postImage, setPostImage] = useState();
   let { id } = useParams();
 
   const notify = () => {
@@ -70,15 +71,13 @@ const Post = ({ post, posts, setPosts }) => {
       { withCredentials: true, contentType: "application/json" }
     );
     setHasLiked(!hasLiked);
-    await axios.post(
-      `http://localhost:5000/api/notifications/${signedInUser.id}`,
-      {
-        fromUserId: signedInUser.id,
-        userIdToNotify: post.userId,
-        postId: post._id,
-        action: `${signedInUser.firstname} ${signedInUser.lastname} liked your post.`,
-      }
-    );
+
+    await axios.post("http://localhost:5000/api/notifications", {
+      fromUserId: signedInUser.id,
+      userIdToNotify: post.userId,
+      postId: post._id,
+      action: `${signedInUser.firstname} ${signedInUser.lastname} liked your post.`,
+    });
   };
 
   // useEffect(() => {

@@ -3,7 +3,7 @@ import Header from "../../components/Header/Header";
 import Leftbar from "../../components/leftbar/Leftbar";
 import NavMenu from "../../components/mobile/NavMenu";
 import Post from "../../components/post/Post";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import axios from "axios";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
@@ -178,7 +178,9 @@ const Profile = () => {
 
               <div className="grid sm:grid-cols-2 lg:grid-cols-2 gap-9  w-full ">
                 {followers?.map((follower, i) => (
-                  <UserCard key={i} user={follower} />
+                  <Link to={`/user/${follower._id}`}>
+                    <UserCard key={i} user={follower} />
+                  </Link>
                 ))}
 
                 {followers?.length === 0 && (
