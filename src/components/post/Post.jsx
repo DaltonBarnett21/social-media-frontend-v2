@@ -125,7 +125,11 @@ const Post = ({ post, posts, setPosts }) => {
         </Link>
 
         {/* show more here */}
-        <ShowMore actionText="Delete Post" />
+        {signedInUser.id === post.userId ? (
+          <ShowMore actionText="Delete Post" />
+        ) : (
+          <ShowMore actionText="Report Post" />
+        )}
       </div>
       <div className=" text-gray-600 pt-2 pb-2 p-3">
         <p>{post?.desc}</p>

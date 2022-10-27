@@ -13,6 +13,7 @@ import { Menu, MenuHandler, MenuList } from "@material-tailwind/react";
 import MenuIcon from "@mui/icons-material/Menu";
 import axios from "axios";
 import MobileMenu from "../mobleMenu/MobileMenu";
+import Search from "../search/Search";
 
 const Header = () => {
   const user = useSelector((state) => state.user);
@@ -63,15 +64,7 @@ const Header = () => {
           />
         </Link>
 
-        <div className=" shadow-md p-1 bg-white  flex ">
-          <SearchIcon className=" text-gray-400 mr-3 " />
-          <input
-            type="text"
-            autoComplete="new-password"
-            placeholder="Search..."
-            className=" outline-none font-extralight text-gray-500 lg:w-[500px] "
-          />
-        </div>
+        <Search />
 
         <MenuIcon
           className="flex lg:invisible cursor-pointer"

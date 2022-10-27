@@ -24,14 +24,56 @@ function App() {
                 </ProtectedRoute>
               }
             />
-            <Route path="/user/:id" element={<Profile otherUser={true} />} />
-            <Route path="/profile/:id" element={<Profile />} />
+            <Route
+              path="/user/:id"
+              element={
+                <ProtectedRoute>
+                  <Profile otherUser={true} />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/profile/:id"
+              element={
+                <ProtectedRoute>
+                  <Profile />
+                </ProtectedRoute>
+              }
+            />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
-            <Route path="/friends" element={<Friends />} />
-            <Route path="/settings" element={<Settings />} />
-            <Route path="/recommended" element={<Recommended />} />
-            <Route path="/notifications" element={<Notifications />} />
+            <Route
+              path="/friends"
+              element={
+                <ProtectedRoute>
+                  <Friends />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/settings"
+              element={
+                <ProtectedRoute>
+                  <Settings />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/recommended"
+              element={
+                <ProtectedRoute>
+                  <Recommended />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/notifications"
+              element={
+                <ProtectedRoute>
+                  <Notifications />
+                </ProtectedRoute>
+              }
+            />
           </Routes>
         </BrowserRouter>
       </AppContainer>
