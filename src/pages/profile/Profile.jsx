@@ -10,10 +10,13 @@ import { useSelector } from "react-redux";
 import AddIcon from "@mui/icons-material/Add";
 import CheckIcon from "@mui/icons-material/Check";
 import UserCard from "../../components/userCard/UserCard";
+import SkeletonCard from "../../components/skeletons/SkeletonCard";
+import ProfileSkeleton from "../../components/skeletons/ProfileSkeleton";
 
 const Profile = () => {
   const [user, setUser] = useState();
   const [isFollowing, setIsFollowing] = useState(false);
+  const [isloading, setIsLoading] = useState(false);
   const [followers, setFollowers] = useState();
   const [userProfile, setUserProfile] = useState();
   const [posts, setPosts] = useState();
@@ -66,10 +69,14 @@ const Profile = () => {
   //get only users post since it's their profile
   useEffect(() => {
     const getUserPosts = async () => {
+      setIsLoading(true);
       await axios
         .get(`http://localhost:5000/api/posts/timeline/${id}?profilePosts=true`)
         .then((res) => {
           setPosts(res.data);
+          setTimeout(() => {
+            setIsLoading(false);
+          }, 2000);
         })
         .catch((err) => {
           console.log(err);
@@ -109,24 +116,29 @@ const Profile = () => {
           <Leftbar />
         </div>
         <div className="flex-1 lg:block lg:flex-[5] lg:p-10">
-          <div className=" relative">
-            <img
-              src={
-                user?.coverPicture
-                  ? user?.coverPicture
-                  : "/No-Image-Placeholder.svg.png"
-              }
-              alt=""
-              className="w-full h-52 object-cover"
-            />
-            <img
-              src={
-                user?.profilePicture ? user?.profilePicture : "/no-avatar.png"
-              }
-              alt=""
-              className="h-24 w-24 rounded-full object-cover absolute left-0 right-0 mx-auto top-[150px] border border-white"
-            />
-          </div>
+          {isloading ? (
+            <ProfileSkeleton />
+          ) : (
+            <div className=" relative">
+              <img
+                src={
+                  user?.coverPicture
+                    ? user?.coverPicture
+                    : "/No-Image-Placeholder.svg.png"
+                }
+                alt=""
+                className="w-full h-52 object-cover"
+              />
+              <img
+                src={
+                  user?.profilePicture ? user?.profilePicture : "/no-avatar.png"
+                }
+                alt=""
+                className="h-24 w-24 rounded-full object-cover absolute left-0 right-0 mx-auto top-[150px] border border-white"
+              />
+            </div>
+          )}
+
           <div className="  mt-12  flex justify-center">
             <div className=" text-center">
               <p className=" font-bold">
@@ -162,11 +174,16 @@ const Profile = () => {
           </div>
           <div className="flex">
             <div className="flex-1 lg:flex-[2] mt-10">
-              {posts?.map((p, i) => {
-                return (
-                  <Post key={i} post={p} posts={posts} setPosts={setPosts} />
-                );
-              })}
+              {isloading &&
+                Array(5)
+                  .fill()
+                  .map((p, i) => <SkeletonCard key={i} />)}
+              {!isloading &&
+                posts?.map((p, i) => {
+                  return (
+                    <Post key={i} post={p} posts={posts} setPosts={setPosts} />
+                  );
+                })}
 
               {posts?.length === 0 && <span>No Posts yet!</span>}
             </div>

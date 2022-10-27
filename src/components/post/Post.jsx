@@ -13,8 +13,10 @@ import "react-toastify/dist/ReactToastify.css";
 import ShowMore from "../utilities/ShowMore";
 import { useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
+import "react-loading-skeleton/dist/skeleton.css";
+import Skeleton from "react-loading-skeleton";
 
-const Post = ({ post, posts, setPosts }) => {
+const Post = ({ post, posts, setPosts, isloading }) => {
   const [user, setUser] = useState({});
   const signedInUser = useSelector((state) => state.user);
   const [like, setLike] = useState(post.likes.length);
@@ -102,13 +104,20 @@ const Post = ({ post, posts, setPosts }) => {
   return (
     <div className="bg-white m-5 shadow-md rounded-lg p-2 relative  ">
       <ToastContainer autoClose={1000} />
+
       <div className="  flex justify-between items-center relative p-2">
         <Link to={`/user/${post.userId}`}>
           <div className="flex items-center">
             <div className="flex h-12  w-12 ">
               <img
                 src={
-                  user.profilePicture ? user.profilePicture : "/no-avatar.png"
+                  user.profilePicture ? (
+                    user.profilePicture
+                  ) : "/no-avatar.png" || isloading ? (
+                    <Skeleton circle={true} height={48} width={48} />
+                  ) : (
+                    "/no-avatar.png"
+                  )
                 }
                 className=" rounded-full w-full h-full object-cover cursor-pointer"
                 alt=""
