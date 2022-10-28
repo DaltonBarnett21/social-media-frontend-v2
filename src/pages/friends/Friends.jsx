@@ -1,8 +1,5 @@
 import React from "react";
-import Header from "../../components/Header/Header";
-import Leftbar from "../../components/leftbar/Leftbar";
-import NavMenu from "../../components/mobile/NavMenu";
-import Rightbar from "../../components/rightbar/Rightbar";
+import MainLayout from "../../layouts/MainLayout";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -37,36 +34,23 @@ const Friends = () => {
   }, []);
 
   return (
-    <div className=" bg-gray-100 h-full relative">
-      <Header />
-      <section className="flex">
-        <div className="hidden lg:block lg:flex-[2] bg-white relative">
-          <Leftbar />
+    <MainLayout>
+      {isLoading &&
+        Array(20)
+          .fill()
+          .map((u, i) => <UserCardSkeleton key={i} />)}
+      {!isLoading &&
+        followers?.map((user, i) => (
+          <Link to={`/user/${user._id}`}>
+            <UserCard user={user} key={i} />
+          </Link>
+        ))}
+      {followers?.length === 0 && (
+        <div className="flex justify-center">
+          <span>You're not following anyone!</span>
         </div>
-        <div className="flex-1 lg:block lg:flex-[5] lg:p-1 relative h-screen">
-          {isLoading &&
-            Array(20)
-              .fill()
-              .map((u, i) => <UserCardSkeleton key={i} />)}
-          {!isLoading &&
-            followers?.map((user, i) => (
-              <Link to={`/user/${user._id}`}>
-                <UserCard user={user} key={i} />
-              </Link>
-            ))}
-          {followers?.length === 0 && (
-            <div className="flex justify-center">
-              <span>You're not following anyone!</span>
-            </div>
-          )}
-        </div>
-        <div className="hidden lg:block lg:flex-[2] bg-white relative">
-          <Rightbar />
-        </div>
-      </section>
-
-      <NavMenu />
-    </div>
+      )}
+    </MainLayout>
   );
 };
 

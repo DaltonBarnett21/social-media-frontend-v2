@@ -1,8 +1,5 @@
 import React from "react";
-import Header from "../../components/Header/Header";
-import Leftbar from "../../components/leftbar/Leftbar";
-import NavMenu from "../../components/mobile/NavMenu";
-import Rightbar from "../../components/rightbar/Rightbar";
+import MainLayout from "../../layouts/MainLayout";
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import axios from "axios";
@@ -27,30 +24,17 @@ const Notifications = () => {
   }, []);
 
   return (
-    <div className=" bg-gray-100 h-full relative">
-      <Header />
-      <section className="flex">
-        <div className="hidden lg:block lg:flex-[2] bg-white relative">
-          <Leftbar />
+    <MainLayout>
+      {notifications?.map((notification, i) => (
+        <div
+          className="flex bg-white shadow-md m-4 justify-between p-4 rounded-md cursor-pointer hover:bg-gray-200"
+          key={i}
+        >
+          <p>{notification.action}</p>
+          <p>{format(notification.createdAt)}</p>
         </div>
-        <div className="flex-1 lg:block lg:flex-[5] lg:p-1 relative h-screen">
-          {notifications?.map((notification, i) => (
-            <div
-              className="flex bg-white shadow-md m-4 justify-between p-4 rounded-md cursor-pointer hover:bg-gray-200"
-              key={i}
-            >
-              <p>{notification.action}</p>
-              <p>{format(notification.createdAt)}</p>
-            </div>
-          ))}
-        </div>
-        <div className="hidden lg:block lg:flex-[2] bg-white relative">
-          <Rightbar />
-        </div>
-      </section>
-
-      <NavMenu />
-    </div>
+      ))}
+    </MainLayout>
   );
 };
 

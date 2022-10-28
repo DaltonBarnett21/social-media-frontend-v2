@@ -16,16 +16,23 @@ const Settings = () => {
   const [tabNumber, setTabNumber] = useState(1);
   const [profileImage, setProfileImage] = useState();
   const [coverImage, setCoverImage] = useState();
-  const [uploadState, setUploadState] = useState("LOADING");
-  const [isProfileImage, setIsProfileImage] = useState(false);
-  const [isCoverImage, setIsCoverImage] = useState(false);
+  const [profileImageState, setProfileImageState] = useState({
+    isLoading: false,
+    success: false,
+    error: false,
+  });
+  const [coverImageState, setCoverImageState] = useState({
+    isLoading: false,
+    success: false,
+    error: false,
+  });
+
   const currentUser = useSelector((state) => state.user);
 
   const uploadProfileImage = async () => {
-    setIsProfileImage(true);
-    setUploadState("LOADING");
     const formData = new FormData();
     formData.append("image", profileImage);
+    profileImageState.isLoading = true;
     await axios
       .put(
         `http://localhost:5000/api/images/${currentUser.id}/profile-image`,
@@ -36,25 +43,20 @@ const Settings = () => {
         }
       )
       .then((res) => {
-        setUploadState("SENT");
-        setTimeout(() => {
-          setUploadState("NOT_SENT");
-        }, 3000);
+        profileImageState.success = true;
+        profileImageState.isLoading = false;
       })
       .catch((err) => {
-        setUploadState("ERROR");
-        setTimeout(() => {
-          setUploadState("NOT_SENT");
-        }, 3000);
+        profileImageState.isLoading = false;
+        profileImageState.error = true;
       });
     formData.delete("image");
   };
 
   const uploadCoverImage = async () => {
-    setIsCoverImage(true);
-    setUploadState("LOADING");
     const formData = new FormData();
     formData.append("image", coverImage);
+    coverImageState.isLoading = true;
     await axios
       .put(
         `http://localhost:5000/api/images/${currentUser.id}/cover-image`,
@@ -65,45 +67,14 @@ const Settings = () => {
         }
       )
       .then((res) => {
-        setUploadState("SENT");
-        setTimeout(() => {
-          setUploadState("NOT_SENT");
-        }, 3000);
+        coverImageState.success = true;
+        coverImageState.isLoading = false;
       })
       .catch((err) => {
-        setUploadState("ERROR");
-        setTimeout(() => {
-          setUploadState("NOT_SENT");
-        }, 3000);
+        coverImageState.isLoading = false;
+        coverImageState.error = true;
       });
     formData.delete("image");
-  };
-
-  const HandleUploadState = ({ children }) => {
-    switch (uploadState) {
-      case "SENT":
-        return (
-          <div className="flex mt-5">
-            <CheckIcon className=" text-green-500 mr-2" />
-            <span>Successful Upload!</span>
-          </div>
-        );
-      case "ERROR":
-        return (
-          <div className="flex mt-5">
-            <CloseIcon className=" text-red-500 mr-2" />
-            <span>Something Went Wrong!</span>
-          </div>
-        );
-      case "LOADING":
-        return (
-          <div className="flex mt-5 h-16 w-16">
-            <img src="/loading.gif" alt="loading icon" />
-          </div>
-        );
-      default:
-        return children;
-    }
   };
 
   return (
@@ -196,28 +167,31 @@ const Settings = () => {
                     <label className="text-xl text-gray-500">
                       Update Profile Image
                     </label>
-                    <div className="flex items-center">
+                    <div className="">
                       <input
                         onChange={(e) => setProfileImage(e.target.files[0])}
                         type="file"
                         className="mt-5 file:bg-blue-400 file:p-2 file:rounded-md file:border-none file:text-white cursor-pointer"
                       />
-                      {isProfileImage ? (
-                        <HandleUploadState>
-                          <button
-                            onClick={uploadProfileImage}
-                            className="bg-blue-400 p-2 rounded-md text-white"
-                          >
-                            Upload Profile Image
-                          </button>
-                        </HandleUploadState>
-                      ) : (
-                        <button
-                          onClick={uploadProfileImage}
-                          className="bg-blue-400 p-2 rounded-md text-white"
-                        >
-                          Upload Profile Image
-                        </button>
+
+                      <button
+                        onClick={uploadProfileImage}
+                        className="bg-blue-400 p-2 rounded-md text-white mt-5 lg:mt-0 "
+                      >
+                        Upload Profile Image
+                      </button>
+
+                      {profileImageState.error && (
+                        <div className="flex">
+                          <p className="mr-2 ">Something Went Wrong!</p>
+                          <CloseIcon className=" text-red-500" />
+                        </div>
+                      )}
+                      {profileImageState.success && (
+                        <div className="flex">
+                          <p className="mr-2">Success!</p>
+                          <CheckIcon className=" text-green-500" />
+                        </div>
                       )}
                     </div>
                   </div>
@@ -232,23 +206,12 @@ const Settings = () => {
                         type="file"
                         className="mt-5 file:bg-blue-400 file:p-2 file:rounded-md file:border-none file:text-white cursor-pointer"
                       />
-                      {isCoverImage ? (
-                        <HandleUploadState>
-                          <button
-                            onClick={uploadCoverImage}
-                            className="bg-blue-400 p-2 rounded-md text-white"
-                          >
-                            Upload Cover Image
-                          </button>
-                        </HandleUploadState>
-                      ) : (
-                        <button
-                          onClick={uploadCoverImage}
-                          className="bg-blue-400 p-2 rounded-md text-white"
-                        >
-                          Upload Cover Image
-                        </button>
-                      )}
+                      <button
+                        onClick={uploadCoverImage}
+                        className="bg-blue-400 p-2 rounded-md text-white mt-5 lg:mt-0"
+                      >
+                        Upload Cover Image
+                      </button>
                     </div>
                   </div>
                   <div className="flex flex-col mt-10">
