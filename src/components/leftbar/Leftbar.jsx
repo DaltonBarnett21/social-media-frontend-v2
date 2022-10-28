@@ -6,6 +6,7 @@ import StoreMallDirectoryIcon from "@mui/icons-material/StoreMallDirectory";
 import { Link, useNavigate } from "react-router-dom";
 import LogoutIcon from "@mui/icons-material/Logout";
 import UserCard from "../userCard/UserCard";
+import UserCardSkeleton from "../skeletons/UserCardSkeleton";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -14,7 +15,7 @@ const Leftbar = () => {
   const navigate = useNavigate();
   const currentUser = useSelector((state) => state.user);
   const [users, setUsers] = useState();
-
+  const [isLoading, setIsLoading] = useState(false);
   const [usersFilter, setUsersFilter] = useState();
 
   const logout = () => {
@@ -24,10 +25,14 @@ const Leftbar = () => {
 
   useEffect(() => {
     const getUsers = async () => {
+      setIsLoading(true);
       await axios
         .get("http://localhost:5000/api/users")
         .then((res) => {
           setUsers(res.data);
+          setTimeout(() => {
+            setIsLoading(false);
+          }, 2000);
         })
         .catch((err) => {
           console.log(err);
@@ -81,13 +86,18 @@ const Leftbar = () => {
           </div>
 
           <div className=" overflow-y-scroll h-72">
-            {usersFilter?.slice(0, 5).map((u, i) => {
-              return (
-                <Link to={`/user/${u._id}`}>
-                  <UserCard user={u} key={i} />
-                </Link>
-              );
-            })}
+            {isLoading &&
+              Array(5)
+                .fill()
+                .map((c, i) => <UserCardSkeleton key={i} />)}
+            {!isLoading &&
+              usersFilter?.slice(0, 5).map((u, i) => {
+                return (
+                  <Link to={`/user/${u._id}`}>
+                    <UserCard user={u} key={i} />
+                  </Link>
+                );
+              })}
           </div>
         </div>
       </div>
