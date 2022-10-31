@@ -1,12 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@import url("https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Ruda&display=swap");
 
 * {
-  font-family: "Oswald", sans-serif;
-}
-
-p {
-  font-weight: 300;
+  font-family: "Ruda", sans-serif;
 }
