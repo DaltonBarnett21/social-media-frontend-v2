@@ -1,12 +1,12 @@
-import React from "react";
-import CreatePost from "../../components/createPost/CreatePost";
-import Post from "../../components/post/Post";
+import React, { Suspense, lazy } from "react";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
 import { setError, setLoading, setSuccess } from "../../redux/loadingSlice";
 import UserCard from "../userCard/UserCard";
 import SkeletonCard from "../skeletons/SkeletonCard";
+const Post = lazy(() => import("../../components/post/Post"));
+const CreatePost = lazy(() => import("../../components/createPost/CreatePost"));
 
 const Feed = () => {
   const [posts, setPosts] = useState([]);
@@ -77,20 +77,20 @@ const Feed = () => {
 
   return (
     <div className="flex-1 lg:block lg:flex-[5] lg:p-1 relative ">
-      {isloading ? <SkeletonCard /> : <CreatePost />}
+      <Suspense fallback={<SkeletonCard />}>
+        <CreatePost />
+      </Suspense>
 
-      {isloading &&
-        Array(5)
-          .fill()
-          .map((skel, i) => <SkeletonCard key={i} />)}
       {posts.map((p, i) => (
-        <Post
-          key={i}
-          post={p}
-          setPosts={setPosts}
-          posts={posts}
-          isloading={isloading}
-        />
+        <Suspense fallback={<SkeletonCard />}>
+          <Post
+            key={i}
+            post={p}
+            setPosts={setPosts}
+            posts={posts}
+            isloading={isloading}
+          />
+        </Suspense>
       ))}
     </div>
   );

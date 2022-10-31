@@ -75,7 +75,11 @@ const Header = () => {
 
         <div className=" hidden lg:flex items-center cursor-pointer relative">
           <div className="relative">
-            <LocalPostOfficeIcon className=" text-gray-600  mr-3 " />
+            <Link to="/messenger">
+              {" "}
+              <LocalPostOfficeIcon className=" text-gray-600  mr-3 " />
+            </Link>
+
             <span className="bg-red-500 text-white text-xs w-4 h-4 flex justify-center items-center rounded-full absolute top-0 left-3">
               1
             </span>

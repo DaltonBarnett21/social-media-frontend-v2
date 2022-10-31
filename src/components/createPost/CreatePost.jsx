@@ -57,7 +57,7 @@ const CreatePost = () => {
     formData.append("desc", post.desc);
     if (image) {
       await axios.post(
-        `http://localhost:5000/api/images/${user.id}`,
+        `http://localhost:5000/api/images/${user.id}?postImage=true`,
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },
@@ -111,6 +111,7 @@ const CreatePost = () => {
               <img
                 src={profileImage ? profileImage : "/no-avatar.png"}
                 className=" rounded-full w-full h-full  object-cover cursor-pointer"
+                loading="lazy"
                 alt=""
               />
             </div>

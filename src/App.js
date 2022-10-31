@@ -9,6 +9,7 @@ import Friends from "./pages/friends/Friends";
 import Settings from "./pages/settings/Settings";
 import Recommended from "./pages/recommended/Recommended";
 import Notifications from "./pages/notifications/Notifications";
+import Messenger from "./pages/messenger/Messenger";
 
 function App() {
   return (
@@ -71,6 +72,14 @@ function App() {
               element={
                 <ProtectedRoute>
                   <Notifications />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/messenger"
+              element={
+                <ProtectedRoute>
+                  <Messenger />
                 </ProtectedRoute>
               }
             />

@@ -110,6 +110,7 @@ const Post = ({ post, posts, setPosts }) => {
                 src={
                   user.profilePicture ? user.profilePicture : "/no-avatar.png"
                 }
+                loading="lazy"
                 className=" rounded-full w-full h-full object-cover cursor-pointer"
                 alt=""
               />
